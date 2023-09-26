@@ -1,6 +1,10 @@
 export const Calculator = () => {
   return (
     <div className="calculator">
+      <div className="screen">
+        {5}
+      </div>
+
       <button type="button" className="btn btn-primary">7</button>
       <button type="button" className="btn btn-primary">8</button>
       <button type="button" className="btn btn-primary">9</button>
