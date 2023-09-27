@@ -1,9 +1,11 @@
 import { useSelector } from "react-redux"
 import { RootState } from "./store"
 
-import { DigitButton } from "./DigitBtn"
-import { OperatorBtn } from "./OperatorBtn"
 import { EOperator } from "../features/mathCore"
+
+import { DigitBtn } from "./buttons/DigitBtn"
+import { OperatorBtn } from "./buttons/OperatorBtn"
+import { ClearBtn } from "./buttons/ClearBtn"
 
 export const Calculator = () => {
   const displayNumber = useSelector((state: RootState) => {
@@ -20,26 +22,26 @@ export const Calculator = () => {
         {displayNumber}
       </div>
 
-      <DigitButton digit={7} />
-      <DigitButton digit={8} />
-      <DigitButton digit={9} />
-      <button type="button" className="btn btn-primary">C</button>
+      <DigitBtn digit={7} />
+      <DigitBtn digit={8} />
+      <DigitBtn digit={9} />
+      <ClearBtn />
       <button type="button" className="btn btn-primary">AC</button>
 
-      <DigitButton digit={4} />
-      <DigitButton digit={5} />
-      <DigitButton digit={6} />
+      <DigitBtn digit={4} />
+      <DigitBtn digit={5} />
+      <DigitBtn digit={6} />
       <OperatorBtn operator={EOperator.Multiplication} />
       <OperatorBtn operator={EOperator.Division} />
 
-      <DigitButton digit={1} />
-      <DigitButton digit={2} />
-      <DigitButton digit={3} />
+      <DigitBtn digit={1} />
+      <DigitBtn digit={2} />
+      <DigitBtn digit={3} />
       <OperatorBtn operator={EOperator.Subtraction} />
       <button type="button" className="btn btn-primary equals-button">=</button>
 
       <button type="button" className="btn btn-primary">+/-</button>
-      <DigitButton digit={0} />
+      <DigitBtn digit={0} />
       <button type="button" className="btn btn-primary">.</button>
       <OperatorBtn operator={EOperator.Addition} />
     </div>

@@ -4,7 +4,7 @@ import { calculate, CalculationError, EOperator } from '../mathCore'
 export interface TMemoryState {
   num: number,
   operator: EOperator | null,
-  acc: number | null,
+  acc: number,
   opBtnPressed: boolean,
   err: boolean
 }
@@ -12,9 +12,9 @@ export interface TMemoryState {
 const initialState: TMemoryState = {
   num: 0,
   operator: null,
-  acc: null,
+  acc: 0,
 
-  opBtnPressed: false,
+  opBtnPressed: true,
   err: false
 }
 
@@ -22,6 +22,7 @@ const memorySlice = createSlice({
   name: 'memory',
   initialState,
   reducers: {
+
     addDigit(state, action: PayloadAction<number>) {
       // If digit added immediately after the operator button pressed - start entering new number
       if (state.opBtnPressed) {
@@ -30,8 +31,8 @@ const memorySlice = createSlice({
       }
       state.num = state.num*10 + action.payload
     },
-    addOperator(state, action: PayloadAction<EOperator>) {
 
+    addOperator(state, action: PayloadAction<EOperator>) {
       state.operator = action.payload
       state.opBtnPressed = true
 
@@ -46,10 +47,15 @@ const memorySlice = createSlice({
           state.err = true
         }
       }
+    },
+
+    clearCurrentInput(state) {
+      state.num = 0
+      state.opBtnPressed = true
     }
   }
 })
 
-export const { addDigit, addOperator } = memorySlice.actions
+export const { addDigit, addOperator, clearCurrentInput } = memorySlice.actions
 
 export default memorySlice.reducer
