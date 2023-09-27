@@ -3,7 +3,7 @@ import expressionReducer from "../features/expression/memorySlice"
 
 export const store = configureStore({
   reducer: {
-    expression: expressionReducer
+    memory: expressionReducer
   }
 })
 

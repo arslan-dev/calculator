@@ -6,12 +6,18 @@ import { OperatorBtn } from "./OperatorBtn"
 import { EOperator } from "../features/mathCore"
 
 export const Calculator = () => {
-  const expression = useSelector((state: RootState) => state.expression.num)
+  const displayNumber = useSelector((state: RootState) => {
+    if (state.memory.opBtnPressed) {
+      return state.memory.acc
+    } else {
+      return state.memory.num
+    }
+  })
 
   return (
     <div className="calculator">
       <div className="screen">
-        {expression}
+        {displayNumber}
       </div>
 
       <DigitButton digit={7} />

@@ -41,6 +41,7 @@ export const COperators: TOperators = {
 }
 
 export type TError = "Error"
+export const CalculationError: TError = "Error"
 
 export function calculate(a: number, b: number, op: EOperator): number | TError {
   return COperators[op].opFunction(a, b)

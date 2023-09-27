@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { EOperator, calculate } from "../features/mathCore"
+import { CalculationError, EOperator, calculate } from "../features/mathCore"
 
 describe('Test Math functions', () => {
   it('should add two numbers', () => {
@@ -24,6 +24,6 @@ describe('Test Math functions', () => {
 
   it('should not divide by zero', () => {
     const actualQuotient = calculate(3, 0, EOperator.Division)
-    expect(actualQuotient).eq("Error")
+    expect(actualQuotient).eq(CalculationError)
   })
 })
