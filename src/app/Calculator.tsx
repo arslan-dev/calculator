@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import { RootState } from "./store"
-import { DigitButton } from "./DigitButton"
+import { DigitButton } from "./DigitBtn"
 
 export const Calculator = () => {
   const expression = useSelector((state: RootState) => state.expression.numberA)
