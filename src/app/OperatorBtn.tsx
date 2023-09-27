@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
-import { operatorAdded } from "../features/expression/expressionSlice"
+import { operatorAdded } from "../features/expression/memorySlice"
 import { COperatorData, EOperator } from "../features/mathCore"
 
 export interface TOperatorBtnProps {

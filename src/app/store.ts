@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import expressionReducer from "../features/expression/expressionSlice"
+import expressionReducer from "../features/expression/memorySlice"
 
 export const store = configureStore({
   reducer: {

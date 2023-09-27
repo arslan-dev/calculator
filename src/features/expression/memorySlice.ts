@@ -1,24 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { EOperator } from '../mathCore'
 
-export interface TExpressionState {
-  numberA: number,
+export interface TMemoryState {
+  num: number,
   operator: EOperator | null,
-  numberB: number | null
+  acc: number | null
 }
 
-const initialState: TExpressionState = {
-  numberA: 6,
+const initialState: TMemoryState = {
+  num: 6,
   operator: null,
-  numberB: null
+  acc: null
 }
 
-const expressionSlice = createSlice({
+const memorySlice = createSlice({
   name: 'expression',
   initialState,
   reducers: {
     digitAdded(state, action: PayloadAction<number>) {
-      state.numberA = state.numberA*10 + action.payload
+      state.num = state.num*10 + action.payload
     },
     operatorAdded(state, action: PayloadAction<EOperator>) {
       state.operator = action.payload
@@ -27,6 +27,6 @@ const expressionSlice = createSlice({
   }
 })
 
-export const { digitAdded, operatorAdded } = expressionSlice.actions
+export const { digitAdded, operatorAdded } = memorySlice.actions
 
-export default expressionSlice.reducer
+export default memorySlice.reducer

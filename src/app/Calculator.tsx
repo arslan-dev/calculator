@@ -6,7 +6,7 @@ import { OperatorBtn } from "./OperatorBtn"
 import { EOperator } from "../features/mathCore"
 
 export const Calculator = () => {
-  const expression = useSelector((state: RootState) => state.expression.numberA)
+  const expression = useSelector((state: RootState) => state.expression.num)
 
   return (
     <div className="calculator">

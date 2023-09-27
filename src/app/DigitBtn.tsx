@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
-import { digitAdded } from "../features/expression/expressionSlice"
+import { digitAdded } from "../features/expression/memorySlice"
 
 export interface TDigitButtonProps {
   digit: number
