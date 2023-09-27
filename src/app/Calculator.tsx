@@ -6,6 +6,7 @@ import { EOperator } from "../features/mathCore"
 import { DigitBtn } from "./buttons/DigitBtn"
 import { OperatorBtn } from "./buttons/OperatorBtn"
 import { ClearBtn } from "./buttons/ClearBtn"
+import { ClearAllBtn } from "./buttons/ClearAllBtn"
 
 export const Calculator = () => {
   const displayNumber = useSelector((state: RootState) => {
@@ -26,7 +27,7 @@ export const Calculator = () => {
       <DigitBtn digit={8} />
       <DigitBtn digit={9} />
       <ClearBtn />
-      <button type="button" className="btn btn-primary">AC</button>
+      <ClearAllBtn />
 
       <DigitBtn digit={4} />
       <DigitBtn digit={5} />

@@ -52,10 +52,14 @@ const memorySlice = createSlice({
     clearCurrentInput(state) {
       state.num = 0
       state.opBtnPressed = true
+    },
+
+    clearAll() {
+      return initialState
     }
   }
 })
 
-export const { addDigit, addOperator, clearCurrentInput } = memorySlice.actions
+export const { addDigit, addOperator, clearCurrentInput, clearAll } = memorySlice.actions
 
 export default memorySlice.reducer
