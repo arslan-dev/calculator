@@ -14,19 +14,19 @@ const initialState: TMemoryState = {
 }
 
 const memorySlice = createSlice({
-  name: 'expression',
+  name: 'memory',
   initialState,
   reducers: {
-    digitAdded(state, action: PayloadAction<number>) {
+    addDigit(state, action: PayloadAction<number>) {
       state.num = state.num*10 + action.payload
     },
-    operatorAdded(state, action: PayloadAction<EOperator>) {
+    addOperator(state, action: PayloadAction<EOperator>) {
       state.operator = action.payload
       console.log("operatorAdded: ", action.payload)
     }
   }
 })
 
-export const { digitAdded, operatorAdded } = memorySlice.actions
+export const { addDigit, addOperator } = memorySlice.actions
 
 export default memorySlice.reducer

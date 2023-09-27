@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
-import { digitAdded } from "../features/expression/memorySlice"
+import { addDigit } from "../features/expression/memorySlice"
 
 export interface TDigitButtonProps {
   digit: number
@@ -9,7 +9,7 @@ export interface TDigitButtonProps {
 
 export const DigitButton = (props: TDigitButtonProps) => {
   const dispatch = useDispatch()
-  const onClick: MouseEventHandler<HTMLButtonElement> = () => dispatch(digitAdded(props.digit))
+  const onClick: MouseEventHandler<HTMLButtonElement> = () => dispatch(addDigit(props.digit))
   // const onKeyDown: KeyboardEventHandler<HTMLButtonElement> = (e) => {
   //   console.log(e.key)
   //   if (e.key === `${props.digit}`) {
