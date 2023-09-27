@@ -33,20 +33,20 @@ const memorySlice = createSlice({
     },
 
     addOperator(state, action: PayloadAction<EOperator>) {
-      state.operator = action.payload
-      state.opBtnPressed = true
-
-      if (!state.acc) {
+      if (!state.operator) {
         state.acc = state.num
       } else {
-        const res = calculate(state.acc, state.num, action.payload)
+        const res = calculate(state.acc, state.num, state.operator)
 
-        if (res != CalculationError) {
+        if (res !== CalculationError) {
           state.acc = res
         } else {
           state.err = true
         }
       }
+
+      state.operator = action.payload
+      state.opBtnPressed = true
     },
 
     clearCurrentInput(state) {
