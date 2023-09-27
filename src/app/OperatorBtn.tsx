@@ -2,7 +2,7 @@ import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
 import { addOperator } from "../features/expression/memorySlice"
-import { COperatorData, EOperator } from "../features/mathCore"
+import { COperators, EOperator } from "../features/mathCore"
 
 export interface TOperatorBtnProps {
   operator: EOperator
@@ -17,6 +17,6 @@ export const OperatorBtn = (props: TOperatorBtnProps) => {
     className="btn btn-dark border border-secondary"
     onClick={onClick}
   >
-    { COperatorData[props.operator] }
+    { COperators[props.operator].symbol }
   </button>
 }

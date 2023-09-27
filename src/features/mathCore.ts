@@ -6,17 +6,42 @@ export enum EOperator {
   Division = "Division"
 }
 
-// export const operatorSymbols: {[Property in keyof EOperator]: string} = [
-//   EOperator.Addition: '+'
-// ]
-
-type TOperatorData = {
-  [key in EOperator]: string
+interface TOperatorData {
+  symbol: string,
+  opFunction: (a: number, b: number) => number | TError 
 }
 
-export const COperatorData: TOperatorData = {
-  Addition: '+',
-  Subtraction: '-',
-  Multiplication: '×',
-  Division: '÷'
+type TOperators = {
+  [key in EOperator]: TOperatorData
+}
+
+export const COperators: TOperators = {
+  Addition: {
+    symbol: '+',
+    opFunction: (a, b) => a+b
+  },
+  Subtraction: {
+    symbol: '-',
+    opFunction: (a, b) => a-b
+  },
+  Multiplication: {
+    symbol: '×',
+    opFunction: (a, b) => a*b
+  },
+  Division: {
+    symbol: '÷',
+    opFunction: (a, b) => {
+      if (b === 0) {
+        return "Error"
+      } else {
+        return a / b
+      }
+    }
+  }
+}
+
+export type TError = "Error"
+
+export function calculate(a: number, b: number, op: EOperator): number | TError {
+  return COperators[op].opFunction(a, b)
 }

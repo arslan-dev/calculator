@@ -4,13 +4,15 @@ import { EOperator } from '../mathCore'
 export interface TMemoryState {
   num: number,
   operator: EOperator | null,
-  acc: number | null
+  acc: number | null,
+  err: boolean
 }
 
 const initialState: TMemoryState = {
   num: 6,
   operator: null,
-  acc: null
+  acc: null,
+  err: false
 }
 
 const memorySlice = createSlice({
@@ -21,8 +23,12 @@ const memorySlice = createSlice({
       state.num = state.num*10 + action.payload
     },
     addOperator(state, action: PayloadAction<EOperator>) {
+      if (!state.acc) {
+        state.acc = state.num
+        state.num = 0
+      }
+      // TODO: Math
       state.operator = action.payload
-      console.log("operatorAdded: ", action.payload)
     }
   }
 })
