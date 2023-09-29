@@ -33,9 +33,7 @@ const memorySlice = createSlice({
     },
 
     addOperator(state, action: PayloadAction<EOperator>) {
-      if (!state.operator) {
-        state.acc = state.num
-      } else {
+      if (state.operator) {
         const res = calculate(state.acc, state.num, state.operator)
 
         if (res !== CalculationError) {
@@ -43,10 +41,26 @@ const memorySlice = createSlice({
         } else {
           state.err = true
         }
+      } else {
+        state.acc = state.num
       }
 
       state.operator = action.payload
       state.opBtnPressed = true
+    },
+
+    calculateResult(state) {
+      if (state.operator) {
+        const res = calculate(state.acc, state.num, state.operator)
+
+        if (res !== CalculationError) {
+          state.acc = res
+        } else {
+          state.err = true
+        }
+
+        state.opBtnPressed = true
+      }
     },
 
     clearCurrentInput(state) {
@@ -60,6 +74,6 @@ const memorySlice = createSlice({
   }
 })
 
-export const { addDigit, addOperator, clearCurrentInput, clearAll } = memorySlice.actions
+export const { addDigit, addOperator, calculateResult, clearCurrentInput, clearAll } = memorySlice.actions
 
 export default memorySlice.reducer

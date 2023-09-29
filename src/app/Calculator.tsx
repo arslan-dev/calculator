@@ -7,6 +7,7 @@ import { DigitBtn } from "./buttons/DigitBtn"
 import { OperatorBtn } from "./buttons/OperatorBtn"
 import { ClearBtn } from "./buttons/ClearBtn"
 import { ClearAllBtn } from "./buttons/ClearAllBtn"
+import { ResultBtn } from "./buttons/ResultBtn"
 
 export const Calculator = () => {
   const displayNumber = useSelector((state: RootState) => {
@@ -39,7 +40,7 @@ export const Calculator = () => {
       <DigitBtn digit={2} />
       <DigitBtn digit={3} />
       <OperatorBtn operator={EOperator.Subtraction} />
-      <button type="button" className="btn btn-primary equals-button">=</button>
+      <ResultBtn />
 
       <button type="button" className="btn btn-primary">+/-</button>
       <DigitBtn digit={0} />
