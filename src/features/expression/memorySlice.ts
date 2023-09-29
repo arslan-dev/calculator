@@ -18,6 +18,18 @@ const initialState: TMemoryState = {
   err: false
 }
 
+function makeTheCalculation(state: TMemoryState) {
+  if (state.operator) {
+    const res = calculate(state.acc, state.num, state.operator)
+
+    if (res !== CalculationError) {
+      state.acc = res
+    } else {
+      state.err = true
+    }
+  }
+}
+
 const memorySlice = createSlice({
   name: 'memory',
   initialState,
@@ -34,13 +46,7 @@ const memorySlice = createSlice({
 
     addOperator(state, action: PayloadAction<EOperator>) {
       if (state.operator) {
-        const res = calculate(state.acc, state.num, state.operator)
-
-        if (res !== CalculationError) {
-          state.acc = res
-        } else {
-          state.err = true
-        }
+        makeTheCalculation(state)
       } else {
         state.acc = state.num
       }
@@ -51,14 +57,7 @@ const memorySlice = createSlice({
 
     calculateResult(state) {
       if (state.operator) {
-        const res = calculate(state.acc, state.num, state.operator)
-
-        if (res !== CalculationError) {
-          state.acc = res
-        } else {
-          state.err = true
-        }
-
+        makeTheCalculation(state)
         state.opBtnPressed = true
       }
     },
