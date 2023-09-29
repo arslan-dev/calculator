@@ -8,6 +8,7 @@ import { OperatorBtn } from "./buttons/OperatorBtn"
 import { ClearBtn } from "./buttons/ClearBtn"
 import { ClearAllBtn } from "./buttons/ClearAllBtn"
 import { ResultBtn } from "./buttons/ResultBtn"
+import { ToggleNegativeBtn } from "./buttons/ToggleNegativeBtn"
 
 export const Calculator = () => {
   const displayNumber = useSelector((state: RootState) => {
@@ -42,7 +43,7 @@ export const Calculator = () => {
       <OperatorBtn operator={EOperator.Subtraction} />
       <ResultBtn />
 
-      <button type="button" className="btn btn-primary">+/-</button>
+      <ToggleNegativeBtn />
       <DigitBtn digit={0} />
       <button type="button" className="btn btn-primary">.</button>
       <OperatorBtn operator={EOperator.Addition} />

@@ -62,6 +62,14 @@ const memorySlice = createSlice({
       }
     },
 
+    toggleNegative(state) {
+      if (state.opBtnPressed) {
+        state.acc *= -1
+      } else {
+        state.num *= -1
+      }
+    },
+
     clearCurrentInput(state) {
       state.num = 0
       state.opBtnPressed = true
@@ -73,6 +81,6 @@ const memorySlice = createSlice({
   }
 })
 
-export const { addDigit, addOperator, calculateResult, clearCurrentInput, clearAll } = memorySlice.actions
+export const { addDigit, addOperator, calculateResult, toggleNegative, clearCurrentInput, clearAll } = memorySlice.actions
 
 export default memorySlice.reducer
