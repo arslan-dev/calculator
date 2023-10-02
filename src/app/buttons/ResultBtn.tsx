@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
-import { calculateResult } from "../../features/expression/memorySlice"
+import { calculateResult } from "../../features/memory/memorySlice"
 
 export const ResultBtn = () => {
   const dispatch = useDispatch()

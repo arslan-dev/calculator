@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
-import { toggleNegative } from "../../features/expression/memorySlice"
+import { toggleNegative } from "../../features/memory/memorySlice"
 
 export const ToggleNegativeBtn = () => {
   const dispatch = useDispatch()

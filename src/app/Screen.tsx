@@ -5,9 +5,9 @@ import { fpnToNumber } from "../features/floatingPointNumber"
 export const Screen = () => {
   const displayNumber = useSelector((state: RootState) => {
     if (state.memory.showResult) {
-      return state.memory.res
+      return state.memory.b
     } else {
-      return state.memory.num
+      return state.memory.a
     }
   })
 

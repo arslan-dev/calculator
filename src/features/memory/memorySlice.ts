@@ -4,17 +4,17 @@ import { CalculatorError } from '../CalculatorError'
 import { addDigitToFPN, FloatingPointNumber, negateFPN, newFPN } from '../floatingPointNumber'
 
 export interface TMemoryState {
-  num: FloatingPointNumber,
+  a: FloatingPointNumber,
   operator: EOperator | null,
-  res: FloatingPointNumber,
+  b: FloatingPointNumber,
   showResult: boolean,
   err: boolean
 }
 
 const initialState: TMemoryState = {
-  num: newFPN(),
+  a: newFPN(),
   operator: null,
-  res: newFPN(),
+  b: newFPN(),
 
   showResult: true,
   err: false
@@ -23,7 +23,7 @@ const initialState: TMemoryState = {
 function makeTheCalculation(state: TMemoryState) {
   if (state.operator) {
     try {
-      state.res = calculate(state.res, state.num, state.operator)
+      state.b = calculate(state.b, state.a, state.operator)
     } catch (e) {
       if (e instanceof CalculatorError) {
         state.err = true
@@ -40,17 +40,17 @@ const memorySlice = createSlice({
     addDigit(state, action: PayloadAction<number>) {
       // If digit added immediately after the operator button pressed - start entering new number
       if (state.showResult) {
-        state.num = newFPN()
+        state.a = newFPN()
         state.showResult = false;
       }
-      state.num = addDigitToFPN(state.num, action.payload)
+      state.a = addDigitToFPN(state.a, action.payload)
     },
 
     addOperator(state, action: PayloadAction<EOperator>) {
       if (state.operator) {
         makeTheCalculation(state)
       } else {
-        state.res = state.num
+        state.b = state.a
       }
 
       state.operator = action.payload
@@ -66,14 +66,14 @@ const memorySlice = createSlice({
 
     toggleNegative(state) {
       if (state.showResult) {
-        state.num = {...state.res}
+        state.a = {...state.b}
       }
 
-      state.num = negateFPN(state.num)
+      state.a = negateFPN(state.a)
     },
 
     clearCurrentInput(state) {
-      state.num = newFPN()
+      state.a = newFPN()
       state.showResult = true
     },
 

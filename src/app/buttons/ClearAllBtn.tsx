@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
-import { clearAll } from "../../features/expression/memorySlice"
+import { clearAll } from "../../features/memory/memorySlice"
 
 export const ClearAllBtn = () => {
   const dispatch = useDispatch()
