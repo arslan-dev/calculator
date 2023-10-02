@@ -22,6 +22,24 @@ describe('Test Math functions', () => {
     })
   })
 
+  describe('Subtract', () => {
+
+    it('should subtract two numbers', () => {
+      const actualSum = calculate( safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Subtraction)
+      expect(actualSum).eq(-1)
+
+      const actualSum2 = calculate( safelyConvertToFPNum(-99999998), safelyConvertToFPNum(1), EOperator.Subtraction)
+      expect(actualSum2).eq(-99999999)
+    })
+
+    it('should throw error if the result is exceeding max digits', () => {
+      const numA = safelyConvertToFPNum(-99999999)
+      const numB = safelyConvertToFPNum(1)
+
+      expect( () => calculate(numA, numB, EOperator.Subtraction) ).toThrow(FPMaxDigitsExceededError)
+    })
+  })
+
   // it('should subtract two numbers', () => {
   //   const actualDifference = calculate(2, 3, EOperator.Subtraction)
   //   expect(actualDifference).eq(-1)

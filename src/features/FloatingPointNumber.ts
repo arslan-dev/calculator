@@ -1,9 +1,4 @@
-class CalculatorError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = "CalculatorError"
-  }
-}
+import { CalculatorError } from "./CalculatorError"
 
 export class FPMaxDigitsExceededError extends CalculatorError {
   constructor() {
@@ -14,9 +9,13 @@ export class FPMaxDigitsExceededError extends CalculatorError {
 
 const MAX_DIGIT_DIVISOR = Math.pow(10, 8)
 
+function exceedsMaxDigits(a: number): boolean {
+  return Math.abs(a) >= MAX_DIGIT_DIVISOR
+}
+
 export function unsafelyConvertToFPNum(a: number): number {
   const truncA = Math.trunc(a)
-  if (truncA >= MAX_DIGIT_DIVISOR) {
+  if (exceedsMaxDigits(truncA)) {
     throw new FPMaxDigitsExceededError
   }
   return truncA

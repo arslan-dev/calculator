@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { calculate, EOperator } from '../mathCore'
+import { CalculatorError } from '../CalculatorError'
+import { safelyConvertToFPNum } from '../floatingPointNumber'
 
 export interface TMemoryState {
   num: number,
@@ -20,12 +22,12 @@ const initialState: TMemoryState = {
 
 function makeTheCalculation(state: TMemoryState) {
   if (state.operator) {
-    const res = calculate(state.acc, state.num, state.operator)
-
-    if (res !== CalculationError) {
-      state.acc = res
-    } else {
-      state.err = true
+    try {
+      state.acc = calculate(state.acc, state.num, state.operator)
+    } catch (e) {
+      if (e instanceof CalculatorError) {
+        state.err = true
+      }
     }
   }
 }
@@ -41,7 +43,7 @@ const memorySlice = createSlice({
         state.num = 0
         state.opBtnPressed = false;
       }
-      state.num = state.num*10 + action.payload
+      state.num = safelyConvertToFPNum( state.num*10 + action.payload )
     },
 
     addOperator(state, action: PayloadAction<EOperator>) {

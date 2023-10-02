@@ -1,10 +1,18 @@
+import { CalculatorError } from "./CalculatorError"
 import { unsafelyConvertToFPNum } from "./floatingPointNumber"
+
+export class ZeroDivisionError extends CalculatorError {
+  constructor() {
+    super("You cannot divide by zero")
+    this.name = "ZeroDivisionError"
+  }
+}
 
 export enum EOperator {
   Addition = "Addition",
-  // Subtraction = "Subtraction",
-  // Multiplication = "Multiplication",
-  // Division = "Division"
+  Subtraction = "Subtraction",
+  Multiplication = "Multiplication",
+  Division = "Division"
 }
 
 interface TOperatorData {
@@ -21,24 +29,23 @@ export const COperators: TOperators = {
     symbol: '+',
     opFunction: (a, b) => a+b
   },
-  // Subtraction: {
-  //   symbol: '-',
-  //   opFunction: (a, b) => a-b
-  // },
-  // Multiplication: {
-  //   symbol: '×',
-  //   opFunction: (a, b) => a*b
-  // },
-  // Division: {
-  //   symbol: '÷',
-  //   opFunction: (a, b) => {
-  //     if (b === 0) {
-  //       return "Error"
-  //     } else {
-  //       return a / b
-  //     }
-  //   }
-  // }
+  Subtraction: {
+    symbol: '-',
+    opFunction: (a, b) => a-b
+  },
+  Multiplication: {
+    symbol: '×',
+    opFunction: (a, b) => a*b
+  },
+  Division: {
+    symbol: '÷',
+    opFunction: (a, b) => {
+      if (b === 0) {
+        throw new ZeroDivisionError()
+      }
+      return a / b
+    }
+  }
 }
 
 export function calculate(a: number, b: number, op: EOperator): number {
