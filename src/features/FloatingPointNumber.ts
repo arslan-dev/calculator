@@ -9,19 +9,32 @@ export class FPMaxDigitsExceededError extends CalculatorError {
 
 const MAX_DIGIT_DIVISOR = Math.pow(10, 8)
 
-function exceedsMaxDigits(a: number): boolean {
-  return Math.abs(a) >= MAX_DIGIT_DIVISOR
+export interface FloatingPointNumber {
+  s: number; // significand
+  // b: number; // base
 }
 
-export function unsafelyConvertToFPNum(a: number): number {
-  const truncA = Math.trunc(a)
+function exceedsMaxDigits(a: FloatingPointNumber): boolean {
+  return Math.abs(a.s) >= MAX_DIGIT_DIVISOR
+}
+
+export function unsafelyConvertToFPNum(a: number): FloatingPointNumber {
+  const truncA: FloatingPointNumber = {
+    s: Math.trunc(a)
+  }
   if (exceedsMaxDigits(truncA)) {
     throw new FPMaxDigitsExceededError
   }
   return truncA
 }
 
-export function safelyConvertToFPNum(a: number): number {
-  const truncA = Math.trunc(a)
-  return truncA % MAX_DIGIT_DIVISOR
+export function safelyConvertToFPNum(a: number): FloatingPointNumber {
+  const truncA: FloatingPointNumber = {
+    s: Math.trunc(a) % MAX_DIGIT_DIVISOR
+  }
+  return truncA
+}
+
+export function convertToNumber(a: FloatingPointNumber): number {
+  return a.s
 }

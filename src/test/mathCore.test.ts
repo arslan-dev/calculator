@@ -7,11 +7,8 @@ describe('Test Math functions', () => {
   describe('Addition', () => {
 
     it('should add two numbers', () => {
-      const actualSum = calculate( safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Addition)
-      expect(actualSum).eq(5)
-
-      const actualSum2 = calculate( safelyConvertToFPNum(99999998), safelyConvertToFPNum(1), EOperator.Addition)
-      expect(actualSum2).eq(99999999)
+      expect( calculate( safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Addition) ).toEqual({ s: 5 })
+      expect( calculate( safelyConvertToFPNum(99999998), safelyConvertToFPNum(1), EOperator.Addition) ).toEqual({ s: 99999999 })
     })
 
     it('should throw error if the result is exceeding max digits', () => {
@@ -22,14 +19,11 @@ describe('Test Math functions', () => {
     })
   })
 
-  describe('Subtract', () => {
+  describe('Subtraction', () => {
 
     it('should subtract two numbers', () => {
-      const actualSum = calculate( safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Subtraction)
-      expect(actualSum).eq(-1)
-
-      const actualSum2 = calculate( safelyConvertToFPNum(-99999998), safelyConvertToFPNum(1), EOperator.Subtraction)
-      expect(actualSum2).eq(-99999999)
+      expect( calculate( safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Subtraction) ).toEqual({s: -1})
+      expect( calculate( safelyConvertToFPNum(-99999998), safelyConvertToFPNum(1), EOperator.Subtraction) ).toEqual({s: -99999999})
     })
 
     it('should throw error if the result is exceeding max digits', () => {
@@ -40,20 +34,28 @@ describe('Test Math functions', () => {
     })
   })
 
-  // it('should subtract two numbers', () => {
-  //   const actualDifference = calculate(2, 3, EOperator.Subtraction)
-  //   expect(actualDifference).eq(-1)
+  describe('Multiplication', () => {
+    it('should multiplicate two numbers', () => {
+      expect( calculate(safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Multiplication) ).toEqual({s: 6})
+      expect( calculate(safelyConvertToFPNum(-2), safelyConvertToFPNum(3), EOperator.Multiplication) ).toEqual({s: -6})
+      expect( calculate(safelyConvertToFPNum(-2), safelyConvertToFPNum(-3), EOperator.Multiplication) ).toEqual({s: 6})
+    })
+
+    it('should throw error if the result is exceeding max digits', () => {
+      const numA = safelyConvertToFPNum(99999999)
+      const numB = safelyConvertToFPNum(2)
+
+      expect( () => calculate(numA, numB, EOperator.Multiplication) ).toThrow(FPMaxDigitsExceededError)
+    })
+  })
+
+  // describe('Division', () => {
+
+  //   it('should divide two numbers', () => {
+  //     expect( calculate(safelyConvertToFPNum(3), safelyConvertToFPNum(2), EOperator.Division) ).eq(1.5)
+  //   })
   // })
 
-  // it('should multiplicate two numbers', () => {
-  //   const actualProduct = calculate(2, 3, EOperator.Multiplication)
-  //   expect(actualProduct).eq(6)
-  // })
-
-  // it('should divide two numbers', () => {
-  //   const actualQuotient = calculate(3, 2, EOperator.Division)
-  //   expect(actualQuotient).eq(1.5)
-  // })
 
   // it('should not divide by zero', () => {
   //   const actualQuotient = calculate(3, 0, EOperator.Division)

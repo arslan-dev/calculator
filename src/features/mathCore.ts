@@ -1,5 +1,5 @@
 import { CalculatorError } from "./CalculatorError"
-import { unsafelyConvertToFPNum } from "./floatingPointNumber"
+import { FloatingPointNumber, convertToNumber, unsafelyConvertToFPNum } from "./floatingPointNumber"
 
 export class ZeroDivisionError extends CalculatorError {
   constructor() {
@@ -17,7 +17,7 @@ export enum EOperator {
 
 interface TOperatorData {
   symbol: string,
-  opFunction: (a: number, b: number) => number
+  opFunction: (a: FloatingPointNumber, b: FloatingPointNumber) => number
 }
 
 type TOperators = {
@@ -27,28 +27,30 @@ type TOperators = {
 export const COperators: TOperators = {
   Addition: {
     symbol: '+',
-    opFunction: (a, b) => a+b
+    opFunction: (a, b) => convertToNumber(a) + convertToNumber(b)
   },
   Subtraction: {
     symbol: '-',
-    opFunction: (a, b) => a-b
+    opFunction: (a, b) => convertToNumber(a) - convertToNumber(b)
   },
   Multiplication: {
     symbol: '×',
-    opFunction: (a, b) => a*b
+    opFunction: (a, b) => convertToNumber(a) * convertToNumber(b)
   },
   Division: {
     symbol: '÷',
     opFunction: (a, b) => {
-      if (b === 0) {
+      const numA = convertToNumber(a)
+      const numB = convertToNumber(b)
+      if (numB === 0) {
         throw new ZeroDivisionError()
       }
-      return a / b
+      return numA / numB
     }
   }
 }
 
-export function calculate(a: number, b: number, op: EOperator): number {
+export function calculate(a: FloatingPointNumber, b: FloatingPointNumber, op: EOperator): FloatingPointNumber {
   const raw = COperators[op].opFunction(a, b)
   return unsafelyConvertToFPNum(raw)
 }
