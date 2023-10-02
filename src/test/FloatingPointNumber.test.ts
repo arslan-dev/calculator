@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { FPMaxDigitsExceededError, addDigitToFPN, convertToNumber, negateFPN, newFPN, safelyConvertToFPNum, unsafelyConvertToFPNum } from "../features/floatingPointNumber"
+import { FPMaxDigitsExceededError, addDigitToFPN, convertToNumber, fpnToNumber, negateFPN, newFPN, safelyConvertToFPNum, unsafelyConvertToFPNum } from "../features/floatingPointNumber"
 
 describe('Floating point number', () => {
   describe('Safe conversion', () => {
@@ -63,6 +63,16 @@ describe('Floating point number', () => {
   describe('Negate', () => {
     it("should negate", () => {
       expect( negateFPN( newFPN(12345678) )).toEqual( newFPN( -12345678 ))
+    })
+  })
+
+  describe('To Number', () => {
+    it("should convert FPN to number", () => {
+      expect( fpnToNumber(newFPN(12345678)) ).eq( 12345678 )
+      expect( fpnToNumber(newFPN(12345678, 3)) ).eq( 12345.678)
+
+      expect( fpnToNumber(newFPN(-12345678)) ).eq( -12345678 )
+      expect( fpnToNumber(newFPN(-12345678, 3)) ).eq( -12345.678)
     })
   })
 })

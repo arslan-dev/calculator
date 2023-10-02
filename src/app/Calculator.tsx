@@ -9,6 +9,7 @@ import { ClearBtn } from "./buttons/ClearBtn"
 import { ClearAllBtn } from "./buttons/ClearAllBtn"
 import { ResultBtn } from "./buttons/ResultBtn"
 import { ToggleNegativeBtn } from "./buttons/ToggleNegativeBtn"
+import { fpnToNumber } from "../features/floatingPointNumber"
 
 export const Calculator = () => {
   const displayNumber = useSelector((state: RootState) => {
@@ -22,7 +23,7 @@ export const Calculator = () => {
   return (
     <div className="calculator">
       <div className="screen">
-        {displayNumber}
+        { fpnToNumber(displayNumber) }
       </div>
 
       <DigitBtn digit={7} />

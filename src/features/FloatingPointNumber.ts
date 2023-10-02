@@ -65,6 +65,10 @@ export function negateFPN(fpn: FloatingPointNumber) {
   return newFPN(-fpn.significand, fpn.base)
 }
 
+export function fpnToNumber(fpn: FloatingPointNumber) {
+  return fpn.significand / Math.pow(10, fpn.base)
+}
+
 function exceedsMaxDigits(a: FloatingPointNumber): boolean {
   return Math.abs(a.significand) >= MAX_DIGIT_DIVISOR
 }
