@@ -1,20 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { calculate, EOperator } from '../mathCore'
 import { CalculatorError } from '../CalculatorError'
-import { safelyConvertToFPNum } from '../floatingPointNumber'
+import { FloatingPointNumber, newFPN, safelyConvertToFPNum } from '../floatingPointNumber'
 
 export interface TMemoryState {
-  num: number,
+  num: FloatingPointNumber,
   operator: EOperator | null,
-  acc: number,
+  acc: FloatingPointNumber,
   opBtnPressed: boolean,
   err: boolean
 }
 
 const initialState: TMemoryState = {
-  num: 0,
+  num: newFPN(),
   operator: null,
-  acc: 0,
+  acc: newFPN(),
 
   opBtnPressed: true,
   err: false
@@ -40,7 +40,7 @@ const memorySlice = createSlice({
     addDigit(state, action: PayloadAction<number>) {
       // If digit added immediately after the operator button pressed - start entering new number
       if (state.opBtnPressed) {
-        state.num = 0
+        state.num = newFPN()
         state.opBtnPressed = false;
       }
       state.num = safelyConvertToFPNum( state.num*10 + action.payload )
