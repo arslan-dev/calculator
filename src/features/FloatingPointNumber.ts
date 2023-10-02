@@ -56,6 +56,15 @@ export function addDigitToFPN(fpn: FloatingPointNumber, digit: number, addToTheR
   return copyFPN;
 }
 
+/**
+ * negates a floating point number
+ * @param fpn the original Floating point number
+ * @returns negated copy of the Original FPN
+ */
+export function negateFPN(fpn: FloatingPointNumber) {
+  return newFPN(-fpn.significand, fpn.base)
+}
+
 function exceedsMaxDigits(a: FloatingPointNumber): boolean {
   return Math.abs(a.significand) >= MAX_DIGIT_DIVISOR
 }

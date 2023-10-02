@@ -1,29 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { calculate, EOperator } from '../mathCore'
 import { CalculatorError } from '../CalculatorError'
-import { FloatingPointNumber, newFPN, safelyConvertToFPNum } from '../floatingPointNumber'
+import { addDigitToFPN, FloatingPointNumber, negateFPN, newFPN } from '../floatingPointNumber'
 
 export interface TMemoryState {
   num: FloatingPointNumber,
   operator: EOperator | null,
-  acc: FloatingPointNumber,
-  opBtnPressed: boolean,
+  res: FloatingPointNumber,
+  showResult: boolean,
   err: boolean
 }
 
 const initialState: TMemoryState = {
   num: newFPN(),
   operator: null,
-  acc: newFPN(),
+  res: newFPN(),
 
-  opBtnPressed: true,
+  showResult: true,
   err: false
 }
 
 function makeTheCalculation(state: TMemoryState) {
   if (state.operator) {
     try {
-      state.acc = calculate(state.acc, state.num, state.operator)
+      state.res = calculate(state.res, state.num, state.operator)
     } catch (e) {
       if (e instanceof CalculatorError) {
         state.err = true
@@ -39,42 +39,42 @@ const memorySlice = createSlice({
 
     addDigit(state, action: PayloadAction<number>) {
       // If digit added immediately after the operator button pressed - start entering new number
-      if (state.opBtnPressed) {
+      if (state.showResult) {
         state.num = newFPN()
-        state.opBtnPressed = false;
+        state.showResult = false;
       }
-      state.num = safelyConvertToFPNum( state.num*10 + action.payload )
+      state.num = addDigitToFPN(state.num, action.payload)
     },
 
     addOperator(state, action: PayloadAction<EOperator>) {
       if (state.operator) {
         makeTheCalculation(state)
       } else {
-        state.acc = state.num
+        state.res = state.num
       }
 
       state.operator = action.payload
-      state.opBtnPressed = true
+      state.showResult = true
     },
 
     calculateResult(state) {
       if (state.operator) {
         makeTheCalculation(state)
-        state.opBtnPressed = true
+        state.showResult = true
       }
     },
 
     toggleNegative(state) {
-      if (state.opBtnPressed) {
-        state.acc *= -1
-      } else {
-        state.num *= -1
+      if (state.showResult) {
+        state.num = {...state.res}
       }
+
+      state.num = negateFPN(state.num)
     },
 
     clearCurrentInput(state) {
-      state.num = 0
-      state.opBtnPressed = true
+      state.num = newFPN()
+      state.showResult = true
     },
 
     clearAll() {

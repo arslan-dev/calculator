@@ -12,8 +12,8 @@ import { ToggleNegativeBtn } from "./buttons/ToggleNegativeBtn"
 
 export const Calculator = () => {
   const displayNumber = useSelector((state: RootState) => {
-    if (state.memory.opBtnPressed) {
-      return state.memory.acc
+    if (state.memory.showResult) {
+      return state.memory.res
     } else {
       return state.memory.num
     }
