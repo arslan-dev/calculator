@@ -69,10 +69,10 @@ describe('Floating point number', () => {
   describe('To Number', () => {
     it("should convert FPN to number", () => {
       expect( fpnToNumber(newFPN(12345678)) ).eq( 12345678 )
-      expect( fpnToNumber(newFPN(12345678, 3)) ).eq( 12345.678)
+      expect( fpnToNumber(newFPN(12345678, 3)) ).eq( 12345.678 )
 
       expect( fpnToNumber(newFPN(-12345678)) ).eq( -12345678 )
-      expect( fpnToNumber(newFPN(-12345678, 3)) ).eq( -12345.678)
+      expect( fpnToNumber(newFPN(-12345678, 3)) ).eq( -12345.678 )
     })
   })
 })

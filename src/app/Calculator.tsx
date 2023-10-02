@@ -1,6 +1,3 @@
-import { useSelector } from "react-redux"
-import { RootState } from "./store"
-
 import { EOperator } from "../features/mathCore"
 
 import { DigitBtn } from "./buttons/DigitBtn"
@@ -9,22 +6,15 @@ import { ClearBtn } from "./buttons/ClearBtn"
 import { ClearAllBtn } from "./buttons/ClearAllBtn"
 import { ResultBtn } from "./buttons/ResultBtn"
 import { ToggleNegativeBtn } from "./buttons/ToggleNegativeBtn"
-import { fpnToNumber } from "../features/floatingPointNumber"
+import { MemoryView } from "./MemoryView"
+import { Screen } from "./Screen"
 
 export const Calculator = () => {
-  const displayNumber = useSelector((state: RootState) => {
-    if (state.memory.showResult) {
-      return state.memory.res
-    } else {
-      return state.memory.num
-    }
-  })
 
   return (
     <div className="calculator">
-      <div className="screen">
-        { fpnToNumber(displayNumber) }
-      </div>
+      <MemoryView />
+      <Screen />
 
       <DigitBtn digit={7} />
       <DigitBtn digit={8} />
