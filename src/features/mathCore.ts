@@ -1,4 +1,4 @@
-import FloatingPointNumber from "./FloatingPointNumber"
+import { unsafelyConvertToFPNum } from "./floatingPointNumber"
 
 export enum EOperator {
   Addition = "Addition",
@@ -9,22 +9,17 @@ export enum EOperator {
 
 interface TOperatorData {
   symbol: string,
-  opFunction: (a: FloatingPointNumber, b: FloatingPointNumber) => FloatingPointNumber
+  opFunction: (a: number, b: number) => number
 }
 
 type TOperators = {
   [key in EOperator]: TOperatorData
 }
 
-function Add(a: FloatingPointNumber, b: FloatingPointNumber): FloatingPointNumber {
-  const sum = a.toNumber() + b.toNumber()
-  return new FloatingPointNumber(sum)
-}
-
 export const COperators: TOperators = {
   Addition: {
     symbol: '+',
-    opFunction: (a, b) => Add(a, b)
+    opFunction: (a, b) => a+b
   },
   // Subtraction: {
   //   symbol: '-',
@@ -46,6 +41,7 @@ export const COperators: TOperators = {
   // }
 }
 
-export function calculate(a: FloatingPointNumber, b: FloatingPointNumber, op: EOperator): FloatingPointNumber {
-  return COperators[op].opFunction(a, b)
+export function calculate(a: number, b: number, op: EOperator): number {
+  const raw = COperators[op].opFunction(a, b)
+  return unsafelyConvertToFPNum(raw)
 }

@@ -1,29 +1,25 @@
-import { describe, test, expect } from "vitest"
+import { describe, it, expect } from "vitest"
 import { EOperator, calculate } from "../features/mathCore"
-import FloatingPointNumber, { FPMaxDigitsExceededError } from "../features/FloatingPointNumber"
+import { FPMaxDigitsExceededError, safelyConvertToFPNum } from "../features/floatingPointNumber"
 
 describe('Test Math functions', () => {
-  test('Addition: should add two numbers', () => {
-    const actualSum = calculate(
-      FloatingPointNumber.safelyFromNumber(2),
-      FloatingPointNumber.safelyFromNumber(3),
-      EOperator.Addition
-    )
-    expect(actualSum.toNumber()).eq(5)
 
-    const actualSum2 = calculate(
-      FloatingPointNumber.safelyFromNumber(99999998),
-      FloatingPointNumber.safelyFromNumber(1),
-      EOperator.Addition
-    )
-    expect(actualSum2.toNumber()).eq(99999999)
-  })
+  describe('Addition', () => {
 
-  test('Addition: should throw error if the result is exceeding max digits', () => {
-    const numA = FloatingPointNumber.safelyFromNumber(99999999)
-    const numB = FloatingPointNumber.safelyFromNumber(1)
+    it('should add two numbers', () => {
+      const actualSum = calculate( safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Addition)
+      expect(actualSum).eq(5)
 
-    expect( () => calculate(numA, numB, EOperator.Addition) ).toThrow(FPMaxDigitsExceededError)
+      const actualSum2 = calculate( safelyConvertToFPNum(99999998), safelyConvertToFPNum(1), EOperator.Addition)
+      expect(actualSum2).eq(99999999)
+    })
+
+    it('should throw error if the result is exceeding max digits', () => {
+      const numA = safelyConvertToFPNum(99999999)
+      const numB = safelyConvertToFPNum(1)
+
+      expect( () => calculate(numA, numB, EOperator.Addition) ).toThrow(FPMaxDigitsExceededError)
+    })
   })
 
   // it('should subtract two numbers', () => {

@@ -14,30 +14,15 @@ export class FPMaxDigitsExceededError extends CalculatorError {
 
 const MAX_DIGIT_DIVISOR = Math.pow(10, 8)
 
-export default class FloatingPointNumber {
-  private _significand: number
-  // private _exponent: number
-
-  constructor(num: number) { 
-    this._significand = Math.trunc(num)
-    if (this._significand >= MAX_DIGIT_DIVISOR) {
-      throw new FPMaxDigitsExceededError
-    }
+export function unsafelyConvertToFPNum(a: number): number {
+  const truncA = Math.trunc(a)
+  if (truncA >= MAX_DIGIT_DIVISOR) {
+    throw new FPMaxDigitsExceededError
   }
+  return truncA
+}
 
-  toNumber() {
-    return this._significand
-  }
-
-  significandLength() {
-    return this._significand > 9999999 
-  }
-
-  static unsafelyFromNumber(a: number): FloatingPointNumber {
-    return new FloatingPointNumber(a)
-  }
-
-  static safelyFromNumber(a: number): FloatingPointNumber {
-    return new FloatingPointNumber(a % MAX_DIGIT_DIVISOR)
-  }
+export function safelyConvertToFPNum(a: number): number {
+  const truncA = Math.trunc(a)
+  return truncA % MAX_DIGIT_DIVISOR
 }

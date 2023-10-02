@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { calculate, CalculationError, EOperator } from '../mathCore'
+import { calculate, EOperator } from '../mathCore'
 
 export interface TMemoryState {
   num: number,
