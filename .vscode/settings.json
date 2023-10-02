@@ -1,7 +1,8 @@
 {
   "cSpell.words": [
     "arslan",
-    "reduxjs"
+    "reduxjs",
+    "significand"
   ],
   "files.exclude": {
     "**/.git": true,
