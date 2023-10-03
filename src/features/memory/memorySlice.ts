@@ -60,12 +60,12 @@ const memorySlice = createSlice({
     },
 
     calculateResult(state) {
-      if (state.operator) {
-        if (!state.temp1) {
+      if (state.temp1 !== null && state.operator) {
+        if (state.temp2 === null) { // if we're calculating for the first time
+          state.temp2 = copyFPN(state.current)
+        } else {
           state.temp1 = copyFPN(state.current)
         }
-
-        state.temp2 = copyFPN(state.current)
 
         try {
           state.current = calculate(state.temp1, state.temp2, state.operator)
