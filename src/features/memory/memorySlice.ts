@@ -9,6 +9,7 @@ export interface TMemoryState {
   temp2: FloatingPointNumber | null,
 
   operator: EOperator | null,
+  newDigitEntered: boolean,
   errorMessage?: string | null
 }
 
@@ -18,6 +19,7 @@ const initialState: TMemoryState = {
   temp2: null, // used when showing the result to temporary store the second number
 
   operator: null,
+  newDigitEntered: false,
   errorMessage: null
 }
 
@@ -31,31 +33,30 @@ const memorySlice = createSlice({
   reducers: {
 
     addDigit(state, action: PayloadAction<number>) {
-      // If digit added immediately after the operator button pressed - start entering new number
-      if (state.temp2) {
+
+      if (!state.newDigitEntered) {
         state.current = newFPN()
-        state.temp2 = null;
       }
       state.current = addDigitToFPN(state.current, action.payload)
+      state.newDigitEntered = true
     },
 
     addOperator(state, action: PayloadAction<EOperator>) {
       if (state.operator) {
-        if (state.temp1 && state.current) {
+        if (state.temp1 && state.newDigitEntered) {
           try {
-            state.temp1 = calculate(state.temp1, state.current, state.operator)
+            state.current = calculate(state.temp1, state.current, state.operator)
           } catch (e) {
             if (e instanceof CalculatorError) {
               state.errorMessage = e.message
             }
           }
         }
-      } else if (state.current) {
-        state.temp1 = state.current
-        state.current = newFPN(0)
       }
 
       state.operator = action.payload
+      state.temp1 = copyFPN(state.current)
+      state.newDigitEntered = false
     },
 
     calculateResult(state) {

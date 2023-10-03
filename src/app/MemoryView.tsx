@@ -5,11 +5,17 @@ import { COperators } from "../features/mathCore"
 
 export const MemoryView = () => {
   const operator = useSelector((state: RootState) => { return state.memory.operator ? COperators[state.memory.operator].symbol : null})
-  const temporary = useSelector((state: RootState) => { return state.memory.temp1 })
+  const temp1 = useSelector((state: RootState) => { return state.memory.temp1 })
+
+  const temp2 = useSelector((state: RootState) => { return state.memory.temp2 })
 
   let debugString = ''
-  if (temporary && operator) {
-    debugString = `${fpnToNumber(temporary)} ${operator}`;
+  if (temp1 && operator) {
+    debugString = `${fpnToNumber(temp1)} ${operator}`;
+
+    if (temp2) {
+      debugString += ` ${fpnToNumber(temp2)} =`
+    }
   }
 
 
