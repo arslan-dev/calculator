@@ -3,29 +3,35 @@ import { calculate, EOperator } from '../mathCore'
 import { CalculatorError } from '../CalculatorError'
 import { addDigitToFPN, copyFPN, FloatingPointNumber, negateFPN, newFPN } from '../floatingPointNumber'
 
+export enum EInputMode { Digit, Operator, Result }
+
 export interface TMemoryState {
   current: FloatingPointNumber,
   temp1: FloatingPointNumber | null,
   temp2: FloatingPointNumber | null,
 
   operator: EOperator | null,
-  newDigitEntered: boolean,
+  inputMode: EInputMode,
   errorMessage?: string | null
 }
 
-const initialState: TMemoryState = {
-  current: newFPN(),
-  temp1: null, // used when entering second number to temporary store the first number
-  temp2: null, // used when showing the result to temporary store the second number
+export function getInitialState(): TMemoryState {
+  return {
+    current: newFPN(),
+    temp1: null, // used when entering second number to temporary store the first number
+    temp2: null, // used when showing the result to temporary store the second number
 
-  operator: null,
-  newDigitEntered: false,
-  errorMessage: null
+    operator: null,
+    inputMode: EInputMode.Digit,
+    errorMessage: null
+  }
 }
 
 // function itIsTheFirstPhase(state: TMemoryState): boolean { return state.operator === null }
 // function itIsTheSecondPhase(state: TMemoryState): boolean { return state.operator !== null && state.temporary === null }
 // function itIsTheThirdPhase(state: TMemoryState): boolean { return state.operator !== null && state.temporary === null }
+
+const initialState = getInitialState()
 
 const memorySlice = createSlice({
   name: 'memory',
@@ -34,16 +40,27 @@ const memorySlice = createSlice({
 
     addDigit(state, action: PayloadAction<number>) {
 
-      if (!state.newDigitEntered) {
-        state.current = newFPN()
+      // let newState: TMemoryState
+      // if (!state.newDigitEntered) {
+      //   newState = {...state, ...initialState}
+      // } else {
+      //   newState = {...state}
+      // }
+
+      let newState: TMemoryState = {...state}
+      switch (state.inputMode) {
+        case EInputMode.Result: newState = getInitialState(); break;
+        case EInputMode.Operator: newState.current = newFPN(); break;
       }
-      state.current = addDigitToFPN(state.current, action.payload)
-      state.newDigitEntered = true
+      newState.current = addDigitToFPN(newState.current, action.payload)
+      newState.inputMode = EInputMode.Digit
+      
+      return newState
     },
 
     addOperator(state, action: PayloadAction<EOperator>) {
-      if (state.operator) {
-        if (state.temp1 && state.newDigitEntered) {
+      if (state.operator && state.temp2 === null) {
+        if (state.temp1 && state.inputMode === EInputMode.Digit) {
           try {
             state.current = calculate(state.temp1, state.current, state.operator)
           } catch (e) {
@@ -56,7 +73,8 @@ const memorySlice = createSlice({
 
       state.operator = action.payload
       state.temp1 = copyFPN(state.current)
-      state.newDigitEntered = false
+      state.temp2 = null
+      state.inputMode = EInputMode.Operator
     },
 
     calculateResult(state) {
@@ -74,6 +92,8 @@ const memorySlice = createSlice({
             state.errorMessage = e.message
           }
         }
+
+        state.inputMode = EInputMode.Result
       }
     },
 
@@ -86,7 +106,7 @@ const memorySlice = createSlice({
     },
 
     clearAll() {
-      return initialState
+      return getInitialState()
     }
   }
 })

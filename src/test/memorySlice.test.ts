@@ -1,5 +1,5 @@
 import { assert, describe, expect, it } from "vitest";
-import memoryReducer, { TMemoryState, addDigit, addOperator, calculateResult } from "../features/memory/memorySlice";
+import memoryReducer, { EInputMode, TMemoryState, addDigit, addOperator, calculateResult } from "../features/memory/memorySlice";
 import { fpnToNumber, newFPN } from "../features/floatingPointNumber";
 import { EOperator } from "../features/mathCore";
 
@@ -9,7 +9,7 @@ const mockInitialState: TMemoryState = {
   temp2: null, // used when showing the result to temporary store the second number
 
   operator: null,
-  newDigitEntered: false,
+  inputMode: EInputMode.Digit,
   errorMessage: null
 }
 
@@ -158,6 +158,42 @@ describe('Calculator workflow', () => {
       expect(actualState.temp2).not.eq(actualState.current)
       assert(actualState.temp2 !== null)
       expect( fpnToNumber( actualState.temp2 )).eq(6)
+    })
+  })
+
+  describe('Digit after result calculation', () => {
+    it('should start a new cycle', () => {
+      let actualState = memoryReducer(undefined, {type: undefined})
+      actualState = memoryReducer(actualState, addDigit(6))
+      actualState = memoryReducer(actualState, addOperator(EOperator.Addition))
+      actualState = memoryReducer(actualState, addDigit(5))
+      actualState = memoryReducer(actualState, calculateResult())
+      actualState = memoryReducer(actualState, addDigit(4))
+
+      expect( fpnToNumber( actualState.current )).eq(4)
+      expect(actualState.operator).null
+      expect(actualState.temp1).null
+      expect(actualState.temp2).null
+    })
+  })
+
+  describe('Operator after result calculation', () => {
+    it('should not calculate more results after entering new operator after result calculation', () => {
+      let actualState = memoryReducer(undefined, {type: undefined})
+      actualState = memoryReducer(actualState, addDigit(6))
+      actualState = memoryReducer(actualState, addOperator(EOperator.Addition))
+      actualState = memoryReducer(actualState, addDigit(5))
+      actualState = memoryReducer(actualState, calculateResult())
+      actualState = memoryReducer(actualState, addOperator(EOperator.Subtraction))
+
+      expect( fpnToNumber( actualState.current )).eq(11)
+      expect(actualState.operator).eq(EOperator.Subtraction)
+
+      expect(actualState.temp1).not.eq(actualState.current)
+      assert(actualState.temp1 !== null)
+      expect( fpnToNumber( actualState.temp1 )).eq(11)
+
+      expect(actualState.temp2).null
     })
   })
 })
