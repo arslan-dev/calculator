@@ -1,36 +1,29 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { calculate, EOperator } from '../mathCore'
 import { CalculatorError } from '../CalculatorError'
-import { addDigitToFPN, FloatingPointNumber, negateFPN, newFPN } from '../floatingPointNumber'
+import { addDigitToFPN, copyFPN, FloatingPointNumber, negateFPN, newFPN } from '../floatingPointNumber'
 
 export interface TMemoryState {
-  a: FloatingPointNumber,
+  current: FloatingPointNumber,
+  temp1: FloatingPointNumber | null,
+  temp2: FloatingPointNumber | null,
+
   operator: EOperator | null,
-  b: FloatingPointNumber,
-  showResult: boolean,
-  err: boolean
+  errorMessage?: string | null
 }
 
 const initialState: TMemoryState = {
-  a: newFPN(),
+  current: newFPN(),
+  temp1: null, // used when entering second number to temporary store the first number
+  temp2: null, // used when showing the result to temporary store the second number
+
   operator: null,
-  b: newFPN(),
-
-  showResult: true,
-  err: false
+  errorMessage: null
 }
 
-function makeTheCalculation(state: TMemoryState) {
-  if (state.operator) {
-    try {
-      state.b = calculate(state.b, state.a, state.operator)
-    } catch (e) {
-      if (e instanceof CalculatorError) {
-        state.err = true
-      }
-    }
-  }
-}
+// function itIsTheFirstPhase(state: TMemoryState): boolean { return state.operator === null }
+// function itIsTheSecondPhase(state: TMemoryState): boolean { return state.operator !== null && state.temporary === null }
+// function itIsTheThirdPhase(state: TMemoryState): boolean { return state.operator !== null && state.temporary === null }
 
 const memorySlice = createSlice({
   name: 'memory',
@@ -39,42 +32,56 @@ const memorySlice = createSlice({
 
     addDigit(state, action: PayloadAction<number>) {
       // If digit added immediately after the operator button pressed - start entering new number
-      if (state.showResult) {
-        state.a = newFPN()
-        state.showResult = false;
+      if (state.temp2) {
+        state.current = newFPN()
+        state.temp2 = null;
       }
-      state.a = addDigitToFPN(state.a, action.payload)
+      state.current = addDigitToFPN(state.current, action.payload)
     },
 
     addOperator(state, action: PayloadAction<EOperator>) {
       if (state.operator) {
-        makeTheCalculation(state)
-      } else {
-        state.b = state.a
+        if (state.temp1 && state.current) {
+          try {
+            state.temp1 = calculate(state.temp1, state.current, state.operator)
+          } catch (e) {
+            if (e instanceof CalculatorError) {
+              state.errorMessage = e.message
+            }
+          }
+        }
+      } else if (state.current) {
+        state.temp1 = state.current
+        state.current = newFPN(0)
       }
 
       state.operator = action.payload
-      state.showResult = true
     },
 
     calculateResult(state) {
       if (state.operator) {
-        makeTheCalculation(state)
-        state.showResult = true
+        if (!state.temp1) {
+          state.temp1 = copyFPN(state.current)
+        }
+
+        state.temp2 = copyFPN(state.current)
+
+        try {
+          state.current = calculate(state.temp1, state.temp2, state.operator)
+        } catch (e) {
+          if (e instanceof CalculatorError) {
+            state.errorMessage = e.message
+          }
+        }
       }
     },
 
     toggleNegative(state) {
-      if (state.showResult) {
-        state.a = {...state.b}
-      }
-
-      state.a = negateFPN(state.a)
+      state.current = negateFPN(state.current)
     },
 
     clearCurrentInput(state) {
-      state.a = newFPN()
-      state.showResult = true
+      state.current = newFPN()
     },
 
     clearAll() {

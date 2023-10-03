@@ -30,6 +30,10 @@ export function newFPN(significand: number = 0, base: number = 0): FloatingPoint
   return {significand: significand, base: base}
 }
 
+export function copyFPN(fpn: FloatingPointNumber): FloatingPointNumber {
+  return {...fpn}
+}
+
 /**
  * Add digit to initial Floating Point Number 
  * The function assumes the arguments are correct

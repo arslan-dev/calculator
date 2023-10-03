@@ -1,15 +1,17 @@
 import { useSelector } from "react-redux"
 import type { RootState } from "./store"
 import { fpnToNumber } from "../features/floatingPointNumber"
+import { COperators } from "../features/mathCore"
 
 export const MemoryView = () => {
-  const displayNumber = useSelector((state: RootState) => {
-    if (state.memory.showResult) {
-      return state.memory.b
-    } else {
-      return state.memory.a
-    }
-  })
+  const operator = useSelector((state: RootState) => { return state.memory.operator ? COperators[state.memory.operator].symbol : null})
+  const temporary = useSelector((state: RootState) => { return state.memory.temp1 })
 
-  return (<div className="memory-view"> { fpnToNumber(displayNumber) } </div>)
+  let debugString = ''
+  if (temporary && operator) {
+    debugString = `${fpnToNumber(temporary)} ${operator}`;
+  }
+
+
+  return (<div className="memory-view"> { debugString } </div>)
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { FPMaxDigitsExceededError, addDigitToFPN, convertToNumber, fpnToNumber, negateFPN, newFPN, safelyConvertToFPNum, unsafelyConvertToFPNum } from "../features/floatingPointNumber"
+import { FPMaxDigitsExceededError, addDigitToFPN, convertToNumber, copyFPN, fpnToNumber, negateFPN, newFPN, safelyConvertToFPNum, unsafelyConvertToFPNum } from "../features/floatingPointNumber"
 
 describe('Floating point number', () => {
   describe('Safe conversion', () => {
@@ -31,6 +31,20 @@ describe('Floating point number', () => {
     it('should throw FPMaxDigitsExceededError if the original number contains more than 8 symbols', () => {
       expect( () => unsafelyConvertToFPNum(123456789) ).toThrow(FPMaxDigitsExceededError)
       expect( () => unsafelyConvertToFPNum(-123456789) ).toThrow(FPMaxDigitsExceededError)
+    })
+  })
+
+  describe('FPN creation', () => {
+    it('should be able to create new Floating point number', () => {
+      expect( newFPN(1, 2) ).toEqual({ significand: 1, base: 2} )
+    })
+
+    it('should be able to copy existing FPN', () => {
+      const fpn = newFPN(1, 2)
+      const fpnCopy = copyFPN(fpn)
+      
+      expect(fpn).toEqual(fpnCopy)
+      expect(fpn).not.eq(fpnCopy)
     })
   })
 
