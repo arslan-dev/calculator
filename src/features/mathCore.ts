@@ -1,5 +1,5 @@
 import { CalculatorError } from "./CalculatorError"
-import { FloatingPointNumber, convertToNumber, unsafelyConvertToFPNum } from "./floatingPointNumber"
+import { FloatingPointNumber, fpnToNumber, unsafelyConvertToFPNum } from "./floatingPointNumber"
 
 export class ZeroDivisionError extends CalculatorError {
   constructor() {
@@ -27,21 +27,21 @@ type TOperators = {
 export const COperators: TOperators = {
   Addition: {
     symbol: '+',
-    opFunction: (a, b) => convertToNumber(a) + convertToNumber(b)
+    opFunction: (a, b) => fpnToNumber(a) + fpnToNumber(b)
   },
   Subtraction: {
     symbol: '-',
-    opFunction: (a, b) => convertToNumber(a) - convertToNumber(b)
+    opFunction: (a, b) => fpnToNumber(a) - fpnToNumber(b)
   },
   Multiplication: {
     symbol: '×',
-    opFunction: (a, b) => convertToNumber(a) * convertToNumber(b)
+    opFunction: (a, b) => fpnToNumber(a) * fpnToNumber(b)
   },
   Division: {
     symbol: '÷',
     opFunction: (a, b) => {
-      const numA = convertToNumber(a)
-      const numB = convertToNumber(b)
+      const numA = fpnToNumber(a)
+      const numB = fpnToNumber(b)
       if (numB === 0) {
         throw new ZeroDivisionError()
       }

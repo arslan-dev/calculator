@@ -1,16 +1,23 @@
 import { CalculatorError } from "./CalculatorError"
 
-export class FPMaxDigitsExceededError extends CalculatorError {
+export class FPNMaxDigitsExceededError extends CalculatorError {
   constructor() {
     super("Floating point number: max digits exceeded. A floating point number must have maximum of 8 digits.")
     this.name = "FPMaxDigitsExceededError"
   }
 }
 
-export class FPInvalidInputData extends CalculatorError {
+export class FPNInvalidInputData extends CalculatorError {
   constructor(message: string) {
     super(`Invalid input data: ${message}`)
     this.name = "FPInvalidInputData"
+  }
+}
+
+export class FPNInvalidFunctionArguments extends CalculatorError {
+  constructor(message: string) {
+    super(`Invalid function arguments: ${message}`)
+    this.name = 'FPNInvalidFunctionArguments'
   }
 }
 
@@ -27,6 +34,9 @@ export interface FloatingPointNumber {
 
 // return new FloatingPointNumber
 export function newFPN(significand: number = 0, base: number = 0): FloatingPointNumber {
+  if (significand % 1 !== 0 || base % 1 !== 0) {
+    throw new FPNInvalidFunctionArguments('newFPN arguments must be integer')
+  }
   return {significand: significand, base: base}
 }
 
@@ -80,17 +90,12 @@ function exceedsMaxDigits(a: FloatingPointNumber): boolean {
 export function unsafelyConvertToFPNum(a: number): FloatingPointNumber {
   const truncA = newFPN(Math.trunc(a))
   if (exceedsMaxDigits(truncA)) {
-    throw new FPMaxDigitsExceededError
+    throw new FPNMaxDigitsExceededError
   }
   return truncA
 }
 
 export function safelyConvertToFPNum(a: number): FloatingPointNumber {
-  // const truncA = Math.trunc(a*)
   const truncA = newFPN(Math.trunc(a) % MAX_DIGIT_DIVISOR)
   return truncA
-}
-
-export function convertToNumber(a: FloatingPointNumber): number {
-  return a.significand
 }

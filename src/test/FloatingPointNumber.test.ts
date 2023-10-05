@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { FPMaxDigitsExceededError, addDigitToFPN, convertToNumber, copyFPN, fpnToNumber, negateFPN, newFPN, safelyConvertToFPNum, unsafelyConvertToFPNum } from "../features/floatingPointNumber"
+import { FPNInvalidFunctionArguments, FPNMaxDigitsExceededError, addDigitToFPN, copyFPN, fpnToNumber, negateFPN, newFPN, safelyConvertToFPNum, unsafelyConvertToFPNum } from "../features/floatingPointNumber"
 
 describe('Floating point number', () => {
   describe('Safe conversion', () => {
@@ -29,14 +29,19 @@ describe('Floating point number', () => {
   describe('Unsafe conversion', () => {
 
     it('should throw FPMaxDigitsExceededError if the original number contains more than 8 symbols', () => {
-      expect( () => unsafelyConvertToFPNum(123456789) ).toThrow(FPMaxDigitsExceededError)
-      expect( () => unsafelyConvertToFPNum(-123456789) ).toThrow(FPMaxDigitsExceededError)
+      expect( () => unsafelyConvertToFPNum(123456789) ).toThrow(FPNMaxDigitsExceededError)
+      expect( () => unsafelyConvertToFPNum(-123456789) ).toThrow(FPNMaxDigitsExceededError)
     })
   })
 
   describe('FPN creation', () => {
     it('should be able to create new Floating point number', () => {
       expect( newFPN(1, 2) ).toEqual({ significand: 1, base: 2} )
+    })
+
+    it('should throw an error if provided with non-integer arguments', () => {
+      expect( () => newFPN(1.5) ).toThrowError(FPNInvalidFunctionArguments)
+      expect( () => newFPN(1, 1.5) ).toThrowError(FPNInvalidFunctionArguments)
     })
 
     it('should be able to copy existing FPN', () => {
@@ -50,7 +55,7 @@ describe('Floating point number', () => {
 
   describe('FPNum to number', () => {
     it('should convert FPNum to number safely', () => {
-      expect(convertToNumber(newFPN(2))).eq(2)
+      expect(fpnToNumber(newFPN(2))).eq(2)
     })
   })
 
