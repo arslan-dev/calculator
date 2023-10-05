@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
-import { addOperator } from "../../features/memory/memorySlice"
+import { selectOperator } from "../../features/memory/memorySlice"
 import { COperators, EOperator } from "../../features/mathCore"
 
 export interface TOperatorBtnProps {
@@ -10,7 +10,7 @@ export interface TOperatorBtnProps {
 
 export const OperatorBtn = (props: TOperatorBtnProps) => {
   const dispatch = useDispatch()
-  const onClick: MouseEventHandler<HTMLButtonElement> = () => dispatch(addOperator(props.operator))
+  const onClick: MouseEventHandler<HTMLButtonElement> = () => dispatch(selectOperator(props.operator))
 
   return <button
     type="button"

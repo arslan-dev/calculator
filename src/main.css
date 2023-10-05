@@ -19,7 +19,7 @@
   display: grid;
   gap: 0.5rem;
   grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 1fr 4rem repeat(4, 1fr);
+  grid-template-rows: 2rem 4rem repeat(4, 1fr);
 }
 
 .calculator .memory-view {

@@ -39,14 +39,6 @@ const memorySlice = createSlice({
   reducers: {
 
     addDigit(state, action: PayloadAction<number>) {
-
-      // let newState: TMemoryState
-      // if (!state.newDigitEntered) {
-      //   newState = {...state, ...initialState}
-      // } else {
-      //   newState = {...state}
-      // }
-
       let newState: TMemoryState = {...state}
       switch (state.inputMode) {
         case EInputMode.Result: newState = getInitialState(); break;
@@ -58,7 +50,7 @@ const memorySlice = createSlice({
       return newState
     },
 
-    addOperator(state, action: PayloadAction<EOperator>) {
+    selectOperator(state, action: PayloadAction<EOperator>) {
       if (state.operator && state.temp2 === null) {
         if (state.temp1 && state.inputMode === EInputMode.Digit) {
           try {
@@ -101,7 +93,10 @@ const memorySlice = createSlice({
       state.current = negateFPN(state.current)
     },
 
-    clearCurrentInput(state) {
+    clearCurrentOperand(state) {
+      if (state.inputMode === EInputMode.Result) {
+        return getInitialState();
+      }
       state.current = newFPN()
     },
 
@@ -111,6 +106,6 @@ const memorySlice = createSlice({
   }
 })
 
-export const { addDigit, addOperator, calculateResult, toggleNegative, clearCurrentInput, clearAll } = memorySlice.actions
+export const { addDigit, selectOperator, calculateResult, toggleNegative, clearCurrentOperand, clearAll } = memorySlice.actions
 
 export default memorySlice.reducer
