@@ -89,7 +89,13 @@ const memorySlice = createSlice({
       }
     },
 
-    toggleNegative(state) {
+    toggleSign(state) {
+      if (state.inputMode === EInputMode.Result) {
+        const negatedCurrent = negateFPN(state.current)
+        const newState = getInitialState();
+        newState.current = negatedCurrent
+        return newState;
+      }
       state.current = negateFPN(state.current)
     },
 
@@ -106,6 +112,6 @@ const memorySlice = createSlice({
   }
 })
 
-export const { addDigit, selectOperator, calculateResult, toggleNegative, clearCurrentOperand, clearAll } = memorySlice.actions
+export const { addDigit, selectOperator, calculateResult, toggleSign, clearCurrentOperand, clearAll } = memorySlice.actions
 
 export default memorySlice.reducer

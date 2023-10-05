@@ -1,11 +1,11 @@
 import { MouseEventHandler } from "react"
 import { useDispatch } from "react-redux"
 
-import { toggleNegative } from "../../features/memory/memorySlice"
+import { toggleSign } from "../../features/memory/memorySlice"
 
 export const ToggleNegativeBtn = () => {
   const dispatch = useDispatch()
-  const onClick: MouseEventHandler<HTMLButtonElement> = () => dispatch(toggleNegative())
+  const onClick: MouseEventHandler<HTMLButtonElement> = () => dispatch(toggleSign())
 
   return <button
     type="button"

@@ -1,5 +1,5 @@
 import { assert, describe, expect, it } from "vitest";
-import memoryReducer, { addDigit, selectOperator, calculateResult, clearAll, clearCurrentOperand, getInitialState } from "../features/memory/memorySlice";
+import memoryReducer, { addDigit, selectOperator, calculateResult, clearAll, clearCurrentOperand, getInitialState, toggleSign } from "../features/memory/memorySlice";
 import { fpnToNumber } from "../features/floatingPointNumber";
 import { EOperator } from "../features/mathCore";
 
@@ -50,7 +50,7 @@ describe('Calculator workflow', () => {
     })
   })
 
-  describe('Operator workflow', () => {
+  describe('Operator input', () => {
 
     it('should save the operator and copy the current operand to temp1 register', () => {
       let actualState = memoryReducer(undefined, {type: undefined})
@@ -128,7 +128,7 @@ describe('Calculator workflow', () => {
     })
   })
 
-  describe('Result calculation workflow', () => {
+  describe('Result calculation', () => {
     it('should calculate the result', () => {
       let actualState = memoryReducer(undefined, {type: undefined})
       actualState = memoryReducer(actualState, addDigit(6))
@@ -187,9 +187,6 @@ describe('Calculator workflow', () => {
     })
   })
 
-  describe('Operator after result calculation', () => {
-  })
-
   describe('Clear all (AC)', () => {
     it('should clear all', () => {
       let actualState = memoryReducer(undefined, {type: undefined})
@@ -225,7 +222,7 @@ describe('Calculator workflow', () => {
       expect( fpnToNumber(actualState.current) ).eq(0)
     })
 
-    it('should start a new cycle after calculating the result', () => {
+    it('should start a new cycle after result calculation', () => {
       let actualState = memoryReducer(undefined, {type: undefined})
       actualState = memoryReducer(actualState, addDigit(6))
       actualState = memoryReducer(actualState, selectOperator(EOperator.Addition))
@@ -234,6 +231,58 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, clearCurrentOperand())
 
       expect( fpnToNumber( actualState.current )).eq(0)
+      expect(actualState.operator).null
+      expect(actualState.temp1).null
+      expect(actualState.temp2).null
+    })
+  })
+
+  describe("Toggle the sign", () => {
+    it("should toggle the sign of the first operand", () => {
+      let actualState = memoryReducer(undefined, {type: undefined})
+      actualState = memoryReducer(actualState, addDigit(1))
+      actualState = memoryReducer(actualState, toggleSign())
+      expect( fpnToNumber(actualState.current) ).eq(-1)
+      actualState = memoryReducer(actualState, toggleSign())
+      expect( fpnToNumber(actualState.current) ).eq(1)
+    })
+
+    it("should toggle the sign of the second operand", () => {
+      let actualState = memoryReducer(undefined, {type: undefined})
+      actualState = memoryReducer(actualState, addDigit(1))
+      actualState = memoryReducer(actualState, selectOperator(EOperator.Addition))
+      actualState = memoryReducer(actualState, addDigit(2))
+      actualState = memoryReducer(actualState, toggleSign())
+      
+      assert(actualState.temp1 !== null)
+      expect( fpnToNumber( actualState.temp1 )).eq(1)
+
+      expect( fpnToNumber(actualState.current) ).eq(-2)
+      actualState = memoryReducer(actualState, toggleSign())
+      expect( fpnToNumber(actualState.current) ).eq(2)
+    })
+
+    it("should create a negated copy of a first operand as a second operand if called immediately after the operator selection", () => {
+      let actualState = memoryReducer(undefined, {type: undefined})
+      actualState = memoryReducer(actualState, addDigit(1))
+      actualState = memoryReducer(actualState, selectOperator(EOperator.Addition))
+      actualState = memoryReducer(actualState, toggleSign())
+
+      assert(actualState.temp1 !== null)
+      expect( fpnToNumber( actualState.temp1 )).eq(1)
+
+      expect( fpnToNumber(actualState.current) ).eq(-1)
+    })
+
+    it("should start a new cycle and create a negated copy of the result if called immediately after the result calculation", () => {
+      let actualState = memoryReducer(undefined, {type: undefined})
+      actualState = memoryReducer(actualState, addDigit(6))
+      actualState = memoryReducer(actualState, selectOperator(EOperator.Addition))
+      actualState = memoryReducer(actualState, addDigit(5))
+      actualState = memoryReducer(actualState, calculateResult())
+      actualState = memoryReducer(actualState, toggleSign())
+
+      expect( fpnToNumber( actualState.current )).eq(-11)
       expect(actualState.operator).null
       expect(actualState.temp1).null
       expect(actualState.temp2).null
