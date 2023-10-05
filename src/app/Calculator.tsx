@@ -8,6 +8,7 @@ import { ResultBtn } from "./buttons/ResultBtn"
 import { ToggleNegativeBtn } from "./buttons/ToggleNegativeBtn"
 import { MemoryView } from "./MemoryView"
 import { Screen } from "./Screen"
+import { AddPointBtn } from "./buttons/AddPointBtn"
 
 export const Calculator = () => {
 
@@ -36,7 +37,7 @@ export const Calculator = () => {
 
       <ToggleNegativeBtn />
       <DigitBtn digit={0} />
-      <button type="button" className="btn btn-primary">.</button>
+      <AddPointBtn />
       <OperatorBtn operator={EOperator.Addition} />
     </div>
   )
