@@ -1,5 +1,5 @@
 import { assert, describe, expect, it } from "vitest";
-import memoryReducer, { addDigit, selectOperator, calculateResult, clearAll, clearCurrentOperand, getInitialState, toggleSign } from "../features/memory/memorySlice";
+import memoryReducer, { addDigit, selectOperator, calculateResult, clearAll, clearCurrentOperand, getInitialState, toggleSign, addPoint } from "../features/memory/memorySlice";
 import { fpnToNumber } from "../features/floatingPointNumber";
 import { EOperator } from "../features/mathCore";
 
@@ -286,6 +286,21 @@ describe('Calculator workflow', () => {
       expect(actualState.operator).null
       expect(actualState.temp1).null
       expect(actualState.temp2).null
+    })
+  })
+
+  describe("Floating point workflow", () => {
+    it("should start adding decimal digits after the point", () => {
+      let actualState = memoryReducer(undefined, {type: undefined})
+      actualState = memoryReducer(actualState, addDigit(1))
+      actualState = memoryReducer(actualState, addDigit(2))
+      actualState = memoryReducer(actualState, addDigit(3))
+      actualState = memoryReducer(actualState, addPoint())
+      actualState = memoryReducer(actualState, addDigit(1))
+      actualState = memoryReducer(actualState, addDigit(2))
+      actualState = memoryReducer(actualState, addDigit(3))
+
+      expect( fpnToNumber(actualState.current) ).eq(123.123)
     })
   })
 })

@@ -4,14 +4,16 @@ import { CalculatorError } from '../CalculatorError'
 import { addDigitToFPN, copyFPN, FloatingPointNumber, negateFPN, newFPN } from '../floatingPointNumber'
 
 export enum EInputMode { Digit, Operator, Result }
+export enum EDigitInputMode { Integer, Decimal }
 
 export interface TMemoryState {
   current: FloatingPointNumber,
   temp1: FloatingPointNumber | null,
   temp2: FloatingPointNumber | null,
-
   operator: EOperator | null,
+
   inputMode: EInputMode,
+  digitInputMode: EDigitInputMode,
   errorMessage?: string | null
 }
 
@@ -20,18 +22,20 @@ export function getInitialState(): TMemoryState {
     current: newFPN(),
     temp1: null, // used when entering second number to temporary store the first number
     temp2: null, // used when showing the result to temporary store the second number
-
     operator: null,
+
     inputMode: EInputMode.Digit,
+    digitInputMode: EDigitInputMode.Integer,
     errorMessage: null
   }
 }
 
-// function itIsTheFirstPhase(state: TMemoryState): boolean { return state.operator === null }
-// function itIsTheSecondPhase(state: TMemoryState): boolean { return state.operator !== null && state.temporary === null }
-// function itIsTheThirdPhase(state: TMemoryState): boolean { return state.operator !== null && state.temporary === null }
-
 const initialState = getInitialState()
+
+function setCurrentToZero(state: TMemoryState) {
+  state.current = newFPN();
+  state.digitInputMode = EDigitInputMode.Integer
+}
 
 const memorySlice = createSlice({
   name: 'memory',
@@ -42,9 +46,9 @@ const memorySlice = createSlice({
       let newState: TMemoryState = {...state}
       switch (state.inputMode) {
         case EInputMode.Result: newState = getInitialState(); break;
-        case EInputMode.Operator: newState.current = newFPN(); break;
+        case EInputMode.Operator: setCurrentToZero(newState); break;
       }
-      newState.current = addDigitToFPN(newState.current, action.payload)
+      newState.current = addDigitToFPN(newState.current, action.payload, newState.digitInputMode===EDigitInputMode.Decimal)
       newState.inputMode = EInputMode.Digit
       
       return newState
@@ -99,11 +103,15 @@ const memorySlice = createSlice({
       state.current = negateFPN(state.current)
     },
 
+    addPoint(state) {
+      state.digitInputMode = EDigitInputMode.Decimal 
+    },
+
     clearCurrentOperand(state) {
       if (state.inputMode === EInputMode.Result) {
         return getInitialState();
       }
-      state.current = newFPN()
+      setCurrentToZero(state)
     },
 
     clearAll() {
@@ -112,6 +120,6 @@ const memorySlice = createSlice({
   }
 })
 
-export const { addDigit, selectOperator, calculateResult, toggleSign, clearCurrentOperand, clearAll } = memorySlice.actions
+export const { addDigit, selectOperator, calculateResult, toggleSign, clearCurrentOperand, clearAll, addPoint } = memorySlice.actions
 
 export default memorySlice.reducer
