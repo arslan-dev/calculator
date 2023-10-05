@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import type { RootState } from "./store"
-import { fpnToNumber } from "../features/floatingPointNumber"
+import { fpnToNum } from "../features/floatingPointNumber"
 import { COperators } from "../features/mathCore"
 
 export const MemoryView = () => {
@@ -11,10 +11,10 @@ export const MemoryView = () => {
 
   let debugString = ''
   if (temp1 && operator) {
-    debugString = `${fpnToNumber(temp1)} ${operator}`;
+    debugString = `${fpnToNum(temp1)} ${operator}`;
 
     if (temp2) {
-      debugString += ` ${fpnToNumber(temp2)} =`
+      debugString += ` ${fpnToNum(temp2)} =`
     }
   }
 

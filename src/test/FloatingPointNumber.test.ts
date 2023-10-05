@@ -1,18 +1,18 @@
 import { describe, it, expect } from "vitest"
-import { FPNInvalidFunctionArguments, FPNMaxDigitsExceededError, addDigitToFPN, copyFPN, fpnToNumber, negateFPN, newFPN, safelyConvertToFPNum, unsafelyConvertToFPNum } from "../features/floatingPointNumber"
+import { FPNInvalidFunctionArguments, FPNMaxDigitsExceededError, addDigitToFPN, copyFPN, fpnToNum, negateFPN, newFPN, safelyNumToFPN, numToFPN } from "../features/floatingPointNumber"
 
 describe('Floating point number', () => {
   describe('Safe conversion', () => {
 
     it('should work properly', () => {
-      expect( safelyConvertToFPNum(2) ).toEqual(newFPN(2))
-      expect( safelyConvertToFPNum(99999999) ).toEqual(newFPN(99999999))
-      expect( safelyConvertToFPNum(-99999999) ).toEqual(newFPN(-99999999))
+      expect( safelyNumToFPN(2) ).toEqual(newFPN(2))
+      expect( safelyNumToFPN(99999999) ).toEqual(newFPN(99999999))
+      expect( safelyNumToFPN(-99999999) ).toEqual(newFPN(-99999999))
     })
 
     it('should safely return the tail of original number', () => {
-      expect( safelyConvertToFPNum(123456789) ).toEqual(newFPN(23456789))
-      expect( safelyConvertToFPNum(-123456789) ).toEqual(newFPN(-23456789))
+      expect( safelyNumToFPN(123456789) ).toEqual(newFPN(23456789))
+      expect( safelyNumToFPN(-123456789) ).toEqual(newFPN(-23456789))
     })
 
     // it('should work for decimals without errors', () => {
@@ -29,8 +29,8 @@ describe('Floating point number', () => {
   describe('Unsafe conversion', () => {
 
     it('should throw FPMaxDigitsExceededError if the original number contains more than 8 symbols', () => {
-      expect( () => unsafelyConvertToFPNum(123456789) ).toThrow(FPNMaxDigitsExceededError)
-      expect( () => unsafelyConvertToFPNum(-123456789) ).toThrow(FPNMaxDigitsExceededError)
+      expect( () => numToFPN(123456789) ).toThrow(FPNMaxDigitsExceededError)
+      expect( () => numToFPN(-123456789) ).toThrow(FPNMaxDigitsExceededError)
     })
   })
 
@@ -55,7 +55,7 @@ describe('Floating point number', () => {
 
   describe('FPNum to number', () => {
     it('should convert FPNum to number safely', () => {
-      expect(fpnToNumber(newFPN(2))).eq(2)
+      expect(fpnToNum(newFPN(2))).eq(2)
     })
   })
 
@@ -87,11 +87,11 @@ describe('Floating point number', () => {
 
   describe('To Number', () => {
     it("should convert FPN to number", () => {
-      expect( fpnToNumber(newFPN(12345678)) ).eq( 12345678 )
-      expect( fpnToNumber(newFPN(12345678, 3)) ).eq( 12345.678 )
+      expect( fpnToNum(newFPN(12345678)) ).eq( 12345678 )
+      expect( fpnToNum(newFPN(12345678, 3)) ).eq( 12345.678 )
 
-      expect( fpnToNumber(newFPN(-12345678)) ).eq( -12345678 )
-      expect( fpnToNumber(newFPN(-12345678, 3)) ).eq( -12345.678 )
+      expect( fpnToNum(newFPN(-12345678)) ).eq( -12345678 )
+      expect( fpnToNum(newFPN(-12345678, 3)) ).eq( -12345.678 )
     })
   })
 })

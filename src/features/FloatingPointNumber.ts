@@ -79,7 +79,7 @@ export function negateFPN(fpn: FloatingPointNumber) {
   return newFPN(-fpn.significand, fpn.base)
 }
 
-export function fpnToNumber(fpn: FloatingPointNumber) {
+export function fpnToNum(fpn: FloatingPointNumber) {
   return fpn.significand / Math.pow(10, fpn.base)
 }
 
@@ -87,7 +87,7 @@ function exceedsMaxDigits(a: FloatingPointNumber): boolean {
   return Math.abs(a.significand) >= MAX_DIGIT_DIVISOR
 }
 
-export function unsafelyConvertToFPNum(a: number): FloatingPointNumber {
+export function numToFPN(a: number): FloatingPointNumber {
   const truncA = newFPN(Math.trunc(a))
   if (exceedsMaxDigits(truncA)) {
     throw new FPNMaxDigitsExceededError
@@ -95,7 +95,7 @@ export function unsafelyConvertToFPNum(a: number): FloatingPointNumber {
   return truncA
 }
 
-export function safelyConvertToFPNum(a: number): FloatingPointNumber {
+export function safelyNumToFPN(a: number): FloatingPointNumber {
   const truncA = newFPN(Math.trunc(a) % MAX_DIGIT_DIVISOR)
   return truncA
 }

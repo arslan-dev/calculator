@@ -1,14 +1,14 @@
 import { describe, it, expect } from "vitest"
 import { EOperator, calculate } from "../features/mathCore"
-import { FPNMaxDigitsExceededError, newFPN, safelyConvertToFPNum} from "../features/floatingPointNumber"
+import { FPNMaxDigitsExceededError, newFPN, safelyNumToFPN} from "../features/floatingPointNumber"
 
 describe('Math functions', () => {
 
   describe('Addition', () => {
 
     it('should add two integer numbers', () => {
-      expect( calculate( safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Addition) ).toEqual(newFPN(5))
-      expect( calculate( safelyConvertToFPNum(99999998), safelyConvertToFPNum(1), EOperator.Addition) ).toEqual(newFPN(99999999))
+      expect( calculate( safelyNumToFPN(2), safelyNumToFPN(3), EOperator.Addition) ).toEqual(newFPN(5))
+      expect( calculate( safelyNumToFPN(99999998), safelyNumToFPN(1), EOperator.Addition) ).toEqual(newFPN(99999999))
     })
 
     it('should add two decimal numbers', () => {
@@ -16,8 +16,8 @@ describe('Math functions', () => {
     })
 
     it('should throw error if the result is exceeding max digits', () => {
-      const numA = safelyConvertToFPNum(99999999)
-      const numB = safelyConvertToFPNum(1)
+      const numA = safelyNumToFPN(99999999)
+      const numB = safelyNumToFPN(1)
 
       expect( () => calculate(numA, numB, EOperator.Addition) ).toThrow(FPNMaxDigitsExceededError)
     })
@@ -26,13 +26,13 @@ describe('Math functions', () => {
   describe('Subtraction', () => {
 
     it('should subtract two numbers', () => {
-      expect( calculate( safelyConvertToFPNum(2), safelyConvertToFPNum(3), EOperator.Subtraction) ).toEqual(newFPN(-1))
-      expect( calculate( safelyConvertToFPNum(-99999998), safelyConvertToFPNum(1), EOperator.Subtraction) ).toEqual(newFPN(-99999999))
+      expect( calculate( safelyNumToFPN(2), safelyNumToFPN(3), EOperator.Subtraction) ).toEqual(newFPN(-1))
+      expect( calculate( safelyNumToFPN(-99999998), safelyNumToFPN(1), EOperator.Subtraction) ).toEqual(newFPN(-99999999))
     })
 
     it('should throw error if the result is exceeding max digits', () => {
-      const numA = safelyConvertToFPNum(-99999999)
-      const numB = safelyConvertToFPNum(1)
+      const numA = safelyNumToFPN(-99999999)
+      const numB = safelyNumToFPN(1)
 
       expect( () => calculate(numA, numB, EOperator.Subtraction) ).toThrow(FPNMaxDigitsExceededError)
     })

@@ -1,6 +1,6 @@
 import { assert, describe, expect, it } from "vitest";
 import memoryReducer, { addDigit, selectOperator, calculateResult, clearAll, clearCurrentOperand, getInitialState, toggleSign, addPoint } from "../features/memory/memorySlice";
-import { fpnToNumber } from "../features/floatingPointNumber";
+import { fpnToNum } from "../features/floatingPointNumber";
 import { EOperator } from "../features/mathCore";
 
 const mockInitialState = getInitialState()
@@ -20,7 +20,7 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, addDigit(2))
       actualState = memoryReducer(actualState, addDigit(3))
 
-      expect( fpnToNumber(actualState.current) ).eq(123)
+      expect( fpnToNum(actualState.current) ).eq(123)
     })
 
     it('should add digits to the current operand after the operator selection', () => {
@@ -30,9 +30,9 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, addDigit(5))
 
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(6)
+      expect( fpnToNum( actualState.temp1 )).eq(6)
 
-      expect( fpnToNumber( actualState.current )).eq(5)
+      expect( fpnToNum( actualState.current )).eq(5)
     })
 
     it('should start a new cycle and add digits to the first operand after calculating the result', () => {
@@ -43,7 +43,7 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, calculateResult())
       actualState = memoryReducer(actualState, addDigit(4))
 
-      expect( fpnToNumber( actualState.current )).eq(4)
+      expect( fpnToNum( actualState.current )).eq(4)
       expect(actualState.operator).null
       expect(actualState.temp1).null
       expect(actualState.temp2).null
@@ -57,12 +57,12 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, addDigit(6))
       actualState = memoryReducer(actualState, selectOperator(EOperator.Addition))
 
-      expect( fpnToNumber( actualState.current )).eq(6)
+      expect( fpnToNum( actualState.current )).eq(6)
       expect(actualState.operator).eq(EOperator.Addition)
 
       expect(actualState.temp1).not.eq(actualState.current)
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(6)
+      expect( fpnToNum( actualState.temp1 )).eq(6)
     })
 
     it('should only switch operators when inputting more than one operator in a row', () => {
@@ -71,12 +71,12 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, selectOperator(EOperator.Addition))
       actualState = memoryReducer(actualState, selectOperator(EOperator.Subtraction))
 
-      expect( fpnToNumber( actualState.current )).eq(6)
+      expect( fpnToNum( actualState.current )).eq(6)
       expect(actualState.operator).eq(EOperator.Subtraction)
 
       expect(actualState.temp1).not.eq(actualState.current)
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(6)
+      expect( fpnToNum( actualState.temp1 )).eq(6)
     })
 
     it('should calculate after the operator input if there are two operands entered already', () => {
@@ -86,12 +86,12 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, addDigit(5))
       actualState = memoryReducer(actualState, selectOperator(EOperator.Subtraction))
 
-      expect( fpnToNumber( actualState.current )).eq(11)
+      expect( fpnToNum( actualState.current )).eq(11)
       expect(actualState.operator).eq(EOperator.Subtraction)
 
       expect(actualState.temp1).not.eq(actualState.current)
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(11)
+      expect( fpnToNum( actualState.temp1 )).eq(11)
     })
 
     it('should calculate only once after new operator input; afterwards it should only switch operators', () => {
@@ -101,12 +101,12 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, addDigit(5))
       actualState = memoryReducer(actualState, selectOperator(EOperator.Multiplication))
 
-      expect( fpnToNumber( actualState.current )).eq(11)
+      expect( fpnToNum( actualState.current )).eq(11)
       expect(actualState.operator).eq(EOperator.Multiplication)
 
       expect(actualState.temp1).not.eq(actualState.current)
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(11)
+      expect( fpnToNum( actualState.temp1 )).eq(11)
     })
 
     it('should not calculate more results (just switch operators) after entering new operator after result calculation', () => {
@@ -117,12 +117,12 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, calculateResult())
       actualState = memoryReducer(actualState, selectOperator(EOperator.Subtraction))
 
-      expect( fpnToNumber( actualState.current )).eq(11)
+      expect( fpnToNum( actualState.current )).eq(11)
       expect(actualState.operator).eq(EOperator.Subtraction)
 
       expect(actualState.temp1).not.eq(actualState.current)
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(11)
+      expect( fpnToNum( actualState.temp1 )).eq(11)
 
       expect(actualState.temp2).null
     })
@@ -136,16 +136,16 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, addDigit(5))
       actualState = memoryReducer(actualState, calculateResult())
 
-      expect( fpnToNumber( actualState.current )).eq(11)
+      expect( fpnToNum( actualState.current )).eq(11)
       expect(actualState.operator).eq(EOperator.Addition)
 
       expect(actualState.temp1).not.eq(actualState.current)
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(6)
+      expect( fpnToNum( actualState.temp1 )).eq(6)
 
       expect(actualState.temp2).not.eq(actualState.current)
       assert(actualState.temp2 !== null)
-      expect( fpnToNumber( actualState.temp2 )).eq(5)
+      expect( fpnToNum( actualState.temp2 )).eq(5)
     })
 
     it('should continue calculating new results', () => {
@@ -156,16 +156,16 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, calculateResult())
       actualState = memoryReducer(actualState, calculateResult())
 
-      expect( fpnToNumber( actualState.current )).eq(16)
+      expect( fpnToNum( actualState.current )).eq(16)
       expect(actualState.operator).eq(EOperator.Addition)
 
       expect(actualState.temp1).not.eq(actualState.current)
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(11)
+      expect( fpnToNum( actualState.temp1 )).eq(11)
 
       expect(actualState.temp2).not.eq(actualState.current)
       assert(actualState.temp2 !== null)
-      expect( fpnToNumber( actualState.temp2 )).eq(5)
+      expect( fpnToNum( actualState.temp2 )).eq(5)
     })
 
     it("should duplicate operands if one isn't available", () => {
@@ -174,16 +174,16 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, selectOperator(EOperator.Addition))
       actualState = memoryReducer(actualState, calculateResult())
 
-      expect( fpnToNumber( actualState.current )).eq(12)
+      expect( fpnToNum( actualState.current )).eq(12)
       expect(actualState.operator).eq(EOperator.Addition)
 
       expect(actualState.temp1).not.eq(actualState.current)
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(6)
+      expect( fpnToNum( actualState.temp1 )).eq(6)
 
       expect(actualState.temp2).not.eq(actualState.current)
       assert(actualState.temp2 !== null)
-      expect( fpnToNumber( actualState.temp2 )).eq(6)
+      expect( fpnToNum( actualState.temp2 )).eq(6)
     })
   })
 
@@ -206,7 +206,7 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, addDigit(1))
       actualState = memoryReducer(actualState, clearCurrentOperand())
 
-      expect( fpnToNumber(actualState.current) ).eq(0)
+      expect( fpnToNum(actualState.current) ).eq(0)
     })
 
     it('should clear the current operand during the second operator input', () => {
@@ -217,9 +217,9 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, clearCurrentOperand())
 
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(1)
+      expect( fpnToNum( actualState.temp1 )).eq(1)
 
-      expect( fpnToNumber(actualState.current) ).eq(0)
+      expect( fpnToNum(actualState.current) ).eq(0)
     })
 
     it('should start a new cycle after result calculation', () => {
@@ -230,7 +230,7 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, calculateResult())
       actualState = memoryReducer(actualState, clearCurrentOperand())
 
-      expect( fpnToNumber( actualState.current )).eq(0)
+      expect( fpnToNum( actualState.current )).eq(0)
       expect(actualState.operator).null
       expect(actualState.temp1).null
       expect(actualState.temp2).null
@@ -242,9 +242,9 @@ describe('Calculator workflow', () => {
       let actualState = memoryReducer(undefined, {type: undefined})
       actualState = memoryReducer(actualState, addDigit(1))
       actualState = memoryReducer(actualState, toggleSign())
-      expect( fpnToNumber(actualState.current) ).eq(-1)
+      expect( fpnToNum(actualState.current) ).eq(-1)
       actualState = memoryReducer(actualState, toggleSign())
-      expect( fpnToNumber(actualState.current) ).eq(1)
+      expect( fpnToNum(actualState.current) ).eq(1)
     })
 
     it("should toggle the sign of the second operand", () => {
@@ -255,11 +255,11 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, toggleSign())
       
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(1)
+      expect( fpnToNum( actualState.temp1 )).eq(1)
 
-      expect( fpnToNumber(actualState.current) ).eq(-2)
+      expect( fpnToNum(actualState.current) ).eq(-2)
       actualState = memoryReducer(actualState, toggleSign())
-      expect( fpnToNumber(actualState.current) ).eq(2)
+      expect( fpnToNum(actualState.current) ).eq(2)
     })
 
     it("should create a negated copy of a first operand as a second operand if called immediately after the operator selection", () => {
@@ -269,9 +269,9 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, toggleSign())
 
       assert(actualState.temp1 !== null)
-      expect( fpnToNumber( actualState.temp1 )).eq(1)
+      expect( fpnToNum( actualState.temp1 )).eq(1)
 
-      expect( fpnToNumber(actualState.current) ).eq(-1)
+      expect( fpnToNum(actualState.current) ).eq(-1)
     })
 
     it("should start a new cycle and create a negated copy of the result if called immediately after the result calculation", () => {
@@ -282,7 +282,7 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, calculateResult())
       actualState = memoryReducer(actualState, toggleSign())
 
-      expect( fpnToNumber( actualState.current )).eq(-11)
+      expect( fpnToNum( actualState.current )).eq(-11)
       expect(actualState.operator).null
       expect(actualState.temp1).null
       expect(actualState.temp2).null
@@ -300,7 +300,7 @@ describe('Calculator workflow', () => {
       actualState = memoryReducer(actualState, addDigit(2))
       actualState = memoryReducer(actualState, addDigit(3))
 
-      expect( fpnToNumber(actualState.current) ).eq(123.123)
+      expect( fpnToNum(actualState.current) ).eq(123.123)
     })
   })
 })
