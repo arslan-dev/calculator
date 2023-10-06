@@ -24,8 +24,8 @@ export class FPNInvalidFunctionArguments extends CalculatorError {
 const MAX_DIGITS = 8
 const MAX_DIGITS_FOR_ADDING_MORE = Math.pow(10, MAX_DIGITS-1)
 const MAX_DIGIT_DIVISOR = Math.pow(10, MAX_DIGITS)
-// const MAX_DIGITS_AFTER_POINT = 3;
-// const POW_10_MAX_DIGITS = Math.pow(10, MAX_DIGITS_AFTER_POINT)
+const MAX_DIGITS_AFTER_POINT = 3;
+const POW_10_MAX_DIGITS = Math.pow(10, MAX_DIGITS_AFTER_POINT)
 
 export interface FloatingPointNumber {
   significand: number;
@@ -36,6 +36,12 @@ export interface FloatingPointNumber {
 export function newFPN(significand: number = 0, base: number = 0): FloatingPointNumber {
   if (significand % 1 !== 0 || base % 1 !== 0) {
     throw new FPNInvalidFunctionArguments('newFPN arguments must be integer')
+  }
+  if (Math.abs(significand) >= MAX_DIGIT_DIVISOR) {
+    throw new FPNMaxDigitsExceededError()
+  }
+  if (base < 0 || base > 3) {
+    throw new FPNInvalidFunctionArguments('base should be an integer in range [0..3]')
   }
   return {significand: significand, base: base}
 }
@@ -83,16 +89,16 @@ export function fpnToNum(fpn: FloatingPointNumber) {
   return fpn.significand / Math.pow(10, fpn.base)
 }
 
-function exceedsMaxDigits(a: FloatingPointNumber): boolean {
-  return Math.abs(a.significand) >= MAX_DIGIT_DIVISOR
-}
-
 export function numToFPN(a: number): FloatingPointNumber {
-  const truncA = newFPN(Math.trunc(a))
-  if (exceedsMaxDigits(truncA)) {
-    throw new FPNMaxDigitsExceededError
+  let significand = Math.round( a * POW_10_MAX_DIGITS )
+  let base = MAX_DIGITS_AFTER_POINT
+
+  while (base > 0 && significand % 10 === 0) {
+    significand /= 10
+    base -= 1
   }
-  return truncA
+
+  return newFPN(significand, base)
 }
 
 export function safelyNumToFPN(a: number): FloatingPointNumber {

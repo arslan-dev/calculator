@@ -28,9 +28,19 @@ describe('Floating point number', () => {
 
   describe('Unsafe conversion', () => {
 
+    it('should convert JS numbers to fpn', () => {
+      expect(numToFPN(123.456)).toEqual(newFPN(123456, 3))
+    })
+
     it('should throw FPMaxDigitsExceededError if the original number contains more than 8 symbols', () => {
       expect( () => numToFPN(123456789) ).toThrow(FPNMaxDigitsExceededError)
       expect( () => numToFPN(-123456789) ).toThrow(FPNMaxDigitsExceededError)
+      expect( () => numToFPN(123456.789) ).toThrow(FPNMaxDigitsExceededError)
+      expect( () => numToFPN(-123456.789) ).toThrow(FPNMaxDigitsExceededError)
+    })
+    
+    it('should keep the precision of 3 digits after the point', () => {
+      expect(numToFPN(123.1234)).toEqual(newFPN(123123, 3))
     })
   })
 
@@ -42,6 +52,11 @@ describe('Floating point number', () => {
     it('should throw an error if provided with non-integer arguments', () => {
       expect( () => newFPN(1.5) ).toThrowError(FPNInvalidFunctionArguments)
       expect( () => newFPN(1, 1.5) ).toThrowError(FPNInvalidFunctionArguments)
+      expect( () => newFPN(1, 4)).toThrowError(FPNInvalidFunctionArguments)
+    })
+
+    it('should throw an error if provided with too many digits', () => {
+      expect( () => newFPN(123456789) ).toThrowError(FPNMaxDigitsExceededError)
     })
 
     it('should be able to copy existing FPN', () => {
