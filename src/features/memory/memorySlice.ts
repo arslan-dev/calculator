@@ -14,7 +14,7 @@ export interface TMemoryState {
 
   inputMode: EInputMode,
   digitInputMode: EDigitInputMode,
-  errorMessage?: string | null
+  errorMessage: string | null
 }
 
 export function getInitialState(): TMemoryState {
@@ -43,6 +43,8 @@ const memorySlice = createSlice({
   reducers: {
 
     addDigit(state, action: PayloadAction<number>) {
+      if (state.errorMessage !== null) return;
+
       let newState: TMemoryState = {...state}
       switch (state.inputMode) {
         case EInputMode.Result: newState = getInitialState(); break;
@@ -55,6 +57,8 @@ const memorySlice = createSlice({
     },
 
     selectOperator(state, action: PayloadAction<EOperator>) {
+      if (state.errorMessage !== null) return;
+
       if (state.operator && state.temp2 === null) {
         if (state.temp1 && state.inputMode === EInputMode.Digit) {
           try {
@@ -74,6 +78,8 @@ const memorySlice = createSlice({
     },
 
     calculateResult(state) {
+      if (state.errorMessage !== null) return;
+
       if (state.temp1 !== null && state.operator) {
         if (state.temp2 === null) { // if we're calculating for the first time
           state.temp2 = copyFPN(state.current)
@@ -94,6 +100,8 @@ const memorySlice = createSlice({
     },
 
     toggleSign(state) {
+      if (state.errorMessage !== null) return;
+
       if (state.inputMode === EInputMode.Result) {
         const negatedCurrent = negateFPN(state.current)
         const newState = getInitialState();
@@ -104,10 +112,14 @@ const memorySlice = createSlice({
     },
 
     addPoint(state) {
+      if (state.errorMessage !== null) return;
+
       state.digitInputMode = EDigitInputMode.Decimal 
     },
 
     clearCurrentOperand(state) {
+      if (state.errorMessage !== null) return;
+
       if (state.inputMode === EInputMode.Result) {
         return getInitialState();
       }

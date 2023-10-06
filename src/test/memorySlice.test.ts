@@ -303,4 +303,16 @@ describe('Calculator workflow', () => {
       expect( fpnToNum(actualState.current) ).eq(123.123)
     })
   })
+
+  describe("Max digits exceed error", () => {
+    it("should display an error when the result's digits exceed maximum", () => {
+      let actualState = memoryReducer(undefined, {type: undefined})
+      actualState = memoryReducer(actualState, addDigit(99999999))
+      actualState = memoryReducer(actualState, selectOperator(EOperator.Addition))
+      actualState = memoryReducer(actualState, addDigit(1))
+      actualState = memoryReducer(actualState, calculateResult())
+      
+      assert(actualState.errorMessage !== null)
+    })
+  })
 })

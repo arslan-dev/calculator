@@ -5,5 +5,8 @@ import { fpnToNum } from "../features/floatingPointNumber"
 // The Screen always displays current number
 export const Screen = () => {
   const displayNumber = useSelector((state: RootState) => state.memory.current)
-  return (<div className="screen"> { fpnToNum(displayNumber) } </div>)
+  const errorMessage = useSelector((state: RootState) => state.memory.errorMessage)
+
+  const text = (errorMessage !== null) ? 'ERROR' : fpnToNum(displayNumber)
+  return (<div className="screen"> { text } </div>)
 }
