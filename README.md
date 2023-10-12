@@ -1,5 +1,7 @@
 # Calculator (App Idea Solution)
 
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/arslan-dev/calculator)
+
 A solution to this challenge: 
 https://github.com/florinpop17/app-ideas/blob/master/Projects/1-Beginner/Calculator-App.md
 
