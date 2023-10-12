@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { calculate, EOperator } from '../mathCore'
 import { CalculatorError } from '../CalculatorError'
-import { addDigitToFPN, copyFPN, FloatingPointNumber, negateFPN, newFPN } from '../floatingPointNumber'
+import { addDigitToFPN, copyFPN, FloatingPointNumber, negateFPN, newFPN } from '../floatingPointNumberUtils'
 
 export enum EInputMode { Digit, Operator, Result }
 export enum EDigitInputMode { Integer, Decimal }

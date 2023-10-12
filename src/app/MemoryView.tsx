@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux"
 import type { RootState } from "./store"
-import { fpnToNum } from "../features/floatingPointNumber"
+import { fpnToNum } from "../features/floatingPointNumberUtils"
 import { COperators } from "../features/mathCore"
 
 export const MemoryView = () => {

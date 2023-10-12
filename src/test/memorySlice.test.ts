@@ -1,6 +1,6 @@
 import { assert, describe, expect, it } from "vitest";
 import memoryReducer, { addDigit, selectOperator, calculateResult, clearAll, clearCurrentOperand, getInitialState, toggleSign, addPoint } from "../features/memory/memorySlice";
-import { fpnToNum } from "../features/floatingPointNumber";
+import { fpnToNum } from "../features/floatingPointNumberUtils";
 import { EOperator } from "../features/mathCore";
 
 const mockInitialState = getInitialState()

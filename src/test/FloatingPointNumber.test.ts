@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { FPNInvalidFunctionArguments, FPNMaxDigitsExceededError, addDigitToFPN, copyFPN, fpnToNum, negateFPN, newFPN, safelyNumToFPN, numToFPN } from "../features/floatingPointNumber"
+import { FPNInvalidFunctionArguments, FPNMaxDigitsExceededError, addDigitToFPN, copyFPN, fpnToNum, negateFPN, newFPN, safelyNumToFPN, numToFPN } from "../features/floatingPointNumberUtils"
 
 describe('Floating point number', () => {
   describe('Safe conversion', () => {

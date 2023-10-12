@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { EOperator, ZeroDivisionError, calculate } from "../features/mathCore"
-import { FPNMaxDigitsExceededError, newFPN, numToFPN, safelyNumToFPN} from "../features/floatingPointNumber"
+import { FPNMaxDigitsExceededError, newFPN, numToFPN, safelyNumToFPN} from "../features/floatingPointNumberUtils"
 
 describe('Math functions', () => {
 

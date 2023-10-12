@@ -1,5 +1,5 @@
 import { CalculatorError } from "./CalculatorError"
-import { FloatingPointNumber, fpnToNum, numToFPN } from "./floatingPointNumber"
+import { FloatingPointNumber, fpnToNum, numToFPN } from "./floatingPointNumberUtils"
 
 export class ZeroDivisionError extends CalculatorError {
   constructor() {
